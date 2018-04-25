@@ -15,24 +15,41 @@ public class CPU implements Runnable{
                                         new PipelineStage(3),
                                         new PipelineStage(4)};
 
-    private HashMap<String, String> register = new HashMap<>();
+    private HashMap<String, Integer> register = new HashMap<>();
     public CPU(){
-        // creating the registers
-        register.put("X0", "0");
-        register.put("X1", "");
-        register.put("X2", "");
-        register.put("X3", "");
-        register.put("X4", "");
-        register.put("X5", "");
-        register.put("X6", "");
-        register.put("X7", "");
-        register.put("X8", "");
-        register.put("X9", "");
-        register.put("X10", "");
-        register.put("X11", "");
-        register.put("X12", "");
-        register.put("X13", "");
-        register.put("X14", "");
+        // creating the 32 registers
+        register.put("x0", 0);
+        register.put("ra", 0);
+        register.put("sp", 0);
+        register.put("gp", 0);
+        register.put("tp", 0);
+        register.put("t0", 0);
+        register.put("t1", 0);
+        register.put("t2", 0);
+        register.put("s0", 0);
+        register.put("s1", 0);
+        register.put("a0", 0);
+        register.put("a1", 0);
+        register.put("a2", 0);
+        register.put("a3", 0);
+        register.put("a4", 0);
+        register.put("a5", 0);
+        register.put("a6", 0);
+        register.put("a7", 0);
+        register.put("s2", 0);
+        register.put("s3", 0);
+        register.put("s4", 0);
+        register.put("s5", 0);
+        register.put("s6", 0);
+        register.put("s7", 0);
+        register.put("s8", 0);
+        register.put("s9", 0);
+        register.put("s10", 0);
+        register.put("s11", 0);
+        register.put("t3", 0);
+        register.put("t4", 0);
+        register.put("t5", 0);
+        register.put("t6", 0);
     }
 
 
