@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 /**
  * Main class
  *
@@ -6,6 +10,51 @@
  */
 public class Main {
     public static void main(String[] args){
+        // instantiating machine hardware
+        Memory memory = new Memory();
+        CPU cpu = new CPU();
+
+        // other variables needed for simulation
+        Scanner scanner = new Scanner(System.in);
+        Scanner fileReader;
+
+        // getting user file to execute
+        printWelcome();
+        try{
+            // load the program file to memory
+            // String fileName = scanner.nextLine();
+            String fileName = "program.txt";
+            fileReader = new Scanner(new File(fileName));
+            while (fileReader.hasNextLine()){ // read the file to memory
+                String line = fileReader.nextLine();
+                line = line.trim();
+                memory.insert(line);
+            }
+
+            // loading first instruction
+            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
+            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
+            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
+            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
+            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
+            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
+            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
+            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
+
+
+
+
+        }catch (FileNotFoundException e){
+            System.out.println("That file does not exist. Please restart Zero and try again.\n" +
+                    "System shutting down...");
+        }
+
+
+    }
+
+    private static void printWelcome(){
+        System.out.println("Welcome to Machine Zero");
+        System.out.print("Please enter a file location to execute:> ");
 
     }
 }

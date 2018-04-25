@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -6,7 +7,7 @@ import java.util.HashMap;
  * @author Patrick Shinn
  * @version 4/21/18
  */
-public class CPU implements Runnable{
+class CPU {
     private long CCT = 500; // clock cycle time in milliseconds
     private ArithmeticLogicUnit ALU = new ArithmeticLogicUnit();
     private PipelineStage[] pipline = { new PipelineStage(0),
@@ -14,9 +15,10 @@ public class CPU implements Runnable{
                                         new PipelineStage(2),
                                         new PipelineStage(3),
                                         new PipelineStage(4)};
-
-    private HashMap<String, Integer> register = new HashMap<>();
-    public CPU(){
+    private int pc = 0;
+    private String[] instruction;
+    private HashMap<String, Integer> register = new HashMap<>(), branch = new HashMap<>();
+    CPU(){
         // creating the 32 registers
         register.put("x0", 0);
         register.put("ra", 0);
@@ -52,10 +54,89 @@ public class CPU implements Runnable{
         register.put("t6", 0);
     }
 
+    int next_pc() {
+        return pc ++; // return pc val then increment to the next one
+    }
 
-    @Override
-    public void run() {
+    void loadInstruction(String instruction){
+        this.instruction = instruction.split("\t");
+        System.out.println(Arrays.toString(this.instruction));
+        Wrapper wrapper = execute(this.instruction);
+        System.out.println(wrapper.getRegister() + ":" + wrapper.getValue());
+    }
 
+    Wrapper execute(String[] instruction){
+        String return_register = "";
+        String [] args;
+        int value = 0;
+        switch (instruction[0].trim()){
+            case "ADD":
+                args = instruction[1].split(",");
+                System.out.println(Arrays.toString(args));
+                return_register = args[0].trim();
+                value = register.get(args[1].trim()) + register.get(args[2].trim());
+                break;
+            case "ADDI":
+                args = instruction[1].split(",");
+                System.out.println(Arrays.toString(args));
+                return_register = args[0].trim();
+                value = register.get(args[1].trim()) + Integer.parseInt(args[2].trim());
+                break;
+            case "SUB":
+                args = instruction[1].split(",");
+                System.out.println(Arrays.toString(args));
+                return_register = args[0].trim();
+                value = register.get(args[1].trim()) - register.get(args[2].trim());
+                break;
+            case "SUBI":
+                args = instruction[1].split(",");
+                System.out.println(Arrays.toString(args));
+                return_register = args[0].trim();
+                value = register.get(args[1].trim()) - Integer.parseInt(args[2].trim());
+                break;
+            case "MUL":
+                args = instruction[1].split(",");
+                System.out.println(Arrays.toString(args));
+                return_register = args[0].trim();
+                value = register.get(args[1].trim()) * register.get(args[2].trim());
+                break;
+            case "BEQ":
+                args = instruction[1].split(",");
+                System.out.println(Arrays.toString(args));
+                return_register = args[0].trim();
+                value = register.get(args[1].trim()) * register.get(args[2].trim());
+                break;
+            case "BNE":
+                args = instruction[1].split(",");
+                System.out.println(Arrays.toString(args));
+                if (register.get(args[0].trim()) == register.get(args[1].trim())) value = 1;
+                else value = 0;
+                return_register = instruction[0];
+                break;
+            case "BNEZ":
+                args = instruction[1].split(",");
+                System.out.println(Arrays.toString(args));
+                if (register.get(args[0].trim()) == 0) value = 1;
+                else value = 0;
+                return_register = instruction[0];
+                break;
+            case "JAL":
+                break;
+            case "LB":
+                break;
+            case "SB":
+                break;
+            case "LW":
+                break;
+            case "SW":
+                break;
+            default: // we are declaring a loop
+                if (!branch.containsKey(instruction[0].trim())) branch.put(instruction[0].trim(), pc); // record where the loop starts
+                execute(Arrays.copyOfRange(instruction, 1, instruction.length));
+                break;
+        }
+
+        return new Wrapper(return_register, value);
     }
 }
 
@@ -91,27 +172,27 @@ class PipelineStage {
         }
     }
 
-    public String getInstruction() {
+    String getInstruction() {
         return instruction;
     }
 
-    public void setInstruction(String instruction) {
+    void setInstruction(String instruction) {
         this.instruction = instruction;
     }
 
-    public boolean isInUse() {
+    boolean isInUse() {
         return inUse;
     }
 
-    public void lock(){
+    void lock(){
         this.inUse = true;
     }
 
-    public void unlock(){
+    void unlock(){
         this.inUse = false;
     }
 
-    public String getStage() {
+    String getStage() {
         return stage.getName();
     }
 }
@@ -134,7 +215,28 @@ enum Stage{
         this.name = name;
     }
 
-    public String getName() {
+    String getName() {
         return name;
+    }
+}
+
+/***
+ * Simple wrapper for register/data pairs that will make my life easier
+ */
+class Wrapper{
+    private String register;
+    private int value;
+
+    Wrapper(String register, int value){
+        this.register = register;
+        this.value = value;
+    }
+
+    public String getRegister() {
+        return register;
+    }
+
+    public int getValue() {
+        return value;
     }
 }
