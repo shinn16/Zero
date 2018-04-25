@@ -1,0 +1,8 @@
+	ADD 	a2,x0,x0
+	ADDI 	a3,x0, 396
+Loop	LW	a1,0(a2)
+	ADDI 	a1,a1,1
+	SW 	a1,0(a2)
+	ADDI 	a2,a2,4
+	SUB 	a4,a3,a2
+	BNEZ 	a4,Loop

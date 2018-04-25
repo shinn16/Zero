@@ -1,14 +1,8 @@
 /**
- * Memory class
+ * Memory Class
  *
  * @author Patrick Shinn
- * @version 4/21/18
+ * @version 4/25/18
  */
-public class Memory implements Runnable{
-
-
-    @Override
-    public void run() {
-
-    }
+public class Memory {
 }
