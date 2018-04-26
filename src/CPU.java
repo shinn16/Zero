@@ -10,15 +10,17 @@ import java.util.HashMap;
 class CPU {
     private long CCT = 500; // clock cycle time in milliseconds
     private ArithmeticLogicUnit ALU = new ArithmeticLogicUnit();
-    private PipelineStage[] pipline = { new PipelineStage(0),
-                                        new PipelineStage(1),
-                                        new PipelineStage(2),
-                                        new PipelineStage(3),
-                                        new PipelineStage(4)};
+    private PipelineStage[] pipline = {new PipelineStage(0),
+            new PipelineStage(1),
+            new PipelineStage(2),
+            new PipelineStage(3),
+            new PipelineStage(4)};
+    private boolean done = false;
     private int pc = 0;
     private String[] instruction;
     private HashMap<String, Integer> register = new HashMap<>(), branch = new HashMap<>();
-    CPU(){
+
+    CPU() {
         // creating the 32 registers
         register.put("x0", 0);
         register.put("ra", 0);
@@ -55,21 +57,25 @@ class CPU {
     }
 
     int next_pc() {
-        return pc ++; // return pc val then increment to the next one
+        return pc++; // return pc val then increment to the next one
     }
 
-    void loadInstruction(String instruction){
-        this.instruction = instruction.split("\t");
-        System.out.println(Arrays.toString(this.instruction));
-        Wrapper wrapper = execute(this.instruction);
-        System.out.println(wrapper.getRegister() + ":" + wrapper.getValue() + " Load info: " + wrapper.getLoad());
+    void loadInstruction(String instruction) {
+        try {
+            this.instruction = instruction.split("\t");
+            System.out.println(Arrays.toString(this.instruction));
+            Wrapper wrapper = execute(this.instruction);
+            System.out.println(wrapper.getRegister() + ":" + wrapper.getValue() + " Load info: " + wrapper.getLoad());
+        }catch (NullPointerException | IndexOutOfBoundsException e){
+            this.done = true;
+        }
     }
 
-    Wrapper execute(String[] instruction){
+    private Wrapper execute(String[] instruction) {
         String return_register = "", off_set = "";
-        String [] args = instruction[1].split(",");
+        String[] args = instruction[1].split(",");
         int value = 0, load = 0;
-        switch (instruction[0].trim()){
+        switch (instruction[0].trim()) {
             case "ADD":
                 System.out.println(Arrays.toString(args));
                 return_register = args[0].trim();
@@ -109,7 +115,10 @@ class CPU {
             case "BNEZ":
                 System.out.println(Arrays.toString(args));
                 if (register.get(args[0].trim()) == 0) value = 1;
-                else value = 0;
+                else{
+                    value = 0;
+                    pc = branch.get(args[1]);
+                }
                 return_register = args[1];
                 break;
             case "JAL":
@@ -135,11 +144,15 @@ class CPU {
                 load = 2;
                 break;
             default: // we are declaring a loop
-                if (!branch.containsKey(instruction[0].trim())) branch.put(instruction[0].trim(), pc); // record where the loop starts
+                if (!branch.containsKey(instruction[0].trim()))
+                    branch.put(instruction[0].trim(), pc); // record where the loop starts
                 return execute(Arrays.copyOfRange(instruction, 1, instruction.length));
         }
-
         return new Wrapper(return_register, value, load, off_set);
+    }
+
+    boolean isDone(){
+        return done;
     }
 }
 

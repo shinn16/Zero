@@ -37,13 +37,7 @@ public class Main {
             start_time = System.currentTimeMillis();
 
             // loading first instruction
-            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
-            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
-            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
-            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
-            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
-            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
-            cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
+            while(!cpu.isDone())
             cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
             // stop timer
             end_time = System.currentTimeMillis();
