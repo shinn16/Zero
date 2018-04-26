@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 /**
@@ -18,6 +19,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Scanner fileReader;
         long start_time, end_time;
+        DecimalFormat df = new DecimalFormat("#.##");
 
         // getting user file to execute
         printWelcome();
@@ -45,7 +47,7 @@ public class Main {
             cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
             // stop timer
             end_time = System.currentTimeMillis();
-            System.out.println("Simulation finished in: " + (end_time - start_time)/1000 + " seconds.");
+            System.out.println("Simulation finished in: " + df.format((end_time - start_time)*0.001) + " seconds.");
 
 
 
