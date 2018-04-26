@@ -63,10 +63,7 @@ class CPU {
     void loadInstruction(String instruction) {
         try {
             this.instruction = instruction.split("\t");
-            System.out.println(Arrays.toString(this.instruction));
             Wrapper wrapper = execute(this.instruction);
-            System.out.println(wrapper.getRegister() + ":=" + wrapper.getValue() + "\nLoad info: " + wrapper.getLoad()
-            + "\n---------------");
             if (register.containsKey(wrapper.getRegister())) {
                 register.put(wrapper.getRegister(), wrapper.getValue()); // write the register value
             }
@@ -76,55 +73,46 @@ class CPU {
     }
 
     private Wrapper execute(String[] instruction) {
+        System.out.println(Arrays.toString(instruction));
         String return_register = "", off_set = "";
         String[] args = instruction[1].split(",");
         int value = 0, load = 0;
         switch (instruction[0].trim()) {
             case "ADD":
-                System.out.println(Arrays.toString(args));
                 return_register = args[0].trim();
                 value = register.get(args[1].trim()) + register.get(args[2].trim());
                 break;
             case "ADDI":
-                System.out.println(Arrays.toString(args));
                 return_register = args[0].trim();
                 value = register.get(args[1].trim()) + Integer.parseInt(args[2].trim());
                 break;
             case "SUB":
-                System.out.println(Arrays.toString(args));
                 return_register = args[0].trim();
                 value = register.get(args[1].trim()) - register.get(args[2].trim());
                 break;
             case "SUBI":
-                System.out.println(Arrays.toString(args));
                 return_register = args[0].trim();
                 value = register.get(args[1].trim()) - Integer.parseInt(args[2].trim());
                 break;
             case "MUL":
-                System.out.println(Arrays.toString(args));
                 return_register = args[0].trim();
                 value = register.get(args[1].trim()) * register.get(args[2].trim());
                 break;
             case "BEQ":
-                System.out.println(Arrays.toString(args));
-                return_register = args[0].trim();
-                value = register.get(args[1].trim()) * register.get(args[2].trim());
                 break;
             case "BNE":
-                System.out.println(Arrays.toString(args));
                 if (register.get(args[0].trim()) == register.get(args[1].trim())) value = 1;
                 else{
                     value = 0;
-                    pc = branch.get(args[1]); // go to branch
+                    pc = branch.get(args[1]) -1; // go to branch
                 }
                 return_register = instruction[0]; // return register returned as branch to take
                 break;
             case "BNEZ":
-                System.out.println(Arrays.toString(args));
                 if (register.get(args[0].trim()) == 0) value = 1;
                 else{
                     value = 0;
-                    pc = branch.get(args[1]); // go to branch
+                    pc = branch.get(args[1]) -1; // go to branch
                 }
                 return_register = args[1];
                 break;
@@ -151,8 +139,9 @@ class CPU {
                 load = 2;
                 break;
             default: // we are declaring a loop
-                if (!branch.containsKey(instruction[0].trim()))
-                    branch.put(instruction[0].trim(), pc); // record where the loop starts
+                // record where the loop starts
+                if (!branch.containsKey(instruction[0].trim())) branch.put(instruction[0].trim(), pc);
+                // execute the instruction
                 return execute(Arrays.copyOfRange(instruction, 1, instruction.length));
         }
         return new Wrapper(return_register, value, load, off_set);
