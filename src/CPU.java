@@ -65,6 +65,7 @@ class CPU {
             this.instruction = instruction.split("\t");
             Wrapper wrapper = execute(this.instruction);
             if (register.containsKey(wrapper.getRegister())) {
+                // todo put this in the proper place
                 register.put(wrapper.getRegister(), wrapper.getValue()); // write the register value
             }
         }catch (NullPointerException | IndexOutOfBoundsException e){
@@ -99,9 +100,15 @@ class CPU {
                 value = register.get(args[1].trim()) * register.get(args[2].trim());
                 break;
             case "BEQ":
+                if (register.get(args[0].trim()) == register.get(args[1].trim())) value = 1;
+                else{
+                    value = 0;
+                    pc = branch.get(args[1]) -1; // go to branch
+                }
+                return_register = instruction[0]; // return register returned as branch to take
                 break;
             case "BNE":
-                if (register.get(args[0].trim()) == register.get(args[1].trim())) value = 1;
+                if (register.get(args[0].trim()) != register.get(args[1].trim())) value = 1;
                 else{
                     value = 0;
                     pc = branch.get(args[1]) -1; // go to branch
