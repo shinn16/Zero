@@ -68,7 +68,7 @@ class CPU {
     Wrapper execute(String[] instruction){
         String return_register = "";
         String [] args;
-        int value = 0;
+        int value = 0, load = 0;
         switch (instruction[0].trim()){
             case "ADD":
                 args = instruction[1].split(",");
@@ -136,7 +136,7 @@ class CPU {
                 break;
         }
 
-        return new Wrapper(return_register, value);
+        return new Wrapper(return_register, value, load);
     }
 }
 
@@ -226,17 +226,23 @@ enum Stage{
 class Wrapper{
     private String register;
     private int value;
+    private int load;
 
-    Wrapper(String register, int value){
+    Wrapper(String register, int value, int load){ // used for load/store operations
         this.register = register;
         this.value = value;
+        this.load = load;
     }
 
-    public String getRegister() {
+    String getRegister() {
         return register;
     }
 
-    public int getValue() {
+    int getValue() {
         return value;
+    }
+
+    int getLoad(){
+        return load;
     }
 }

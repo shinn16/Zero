@@ -17,6 +17,7 @@ public class Main {
         // other variables needed for simulation
         Scanner scanner = new Scanner(System.in);
         Scanner fileReader;
+        long start_time, end_time;
 
         // getting user file to execute
         printWelcome();
@@ -30,6 +31,8 @@ public class Main {
                 line = line.trim();
                 memory.insert(line);
             }
+            // start timer
+            start_time = System.currentTimeMillis();
 
             // loading first instruction
             cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
@@ -40,6 +43,9 @@ public class Main {
             cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
             cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
             cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
+            // stop timer
+            end_time = System.currentTimeMillis();
+            System.out.println("Simulation finished in: " + (end_time - start_time)/1000 + " seconds.");
 
 
 
