@@ -65,7 +65,11 @@ class CPU {
             this.instruction = instruction.split("\t");
             System.out.println(Arrays.toString(this.instruction));
             Wrapper wrapper = execute(this.instruction);
-            System.out.println(wrapper.getRegister() + ":" + wrapper.getValue() + " Load info: " + wrapper.getLoad());
+            System.out.println(wrapper.getRegister() + ":=" + wrapper.getValue() + "\nLoad info: " + wrapper.getLoad()
+            + "\n---------------");
+            if (register.containsKey(wrapper.getRegister())) {
+                register.put(wrapper.getRegister(), wrapper.getValue()); // write the register value
+            }
         }catch (NullPointerException | IndexOutOfBoundsException e){
             this.done = true;
         }
@@ -109,7 +113,10 @@ class CPU {
             case "BNE":
                 System.out.println(Arrays.toString(args));
                 if (register.get(args[0].trim()) == register.get(args[1].trim())) value = 1;
-                else value = 0;
+                else{
+                    value = 0;
+                    pc = branch.get(args[1]); // go to branch
+                }
                 return_register = instruction[0]; // return register returned as branch to take
                 break;
             case "BNEZ":
@@ -117,7 +124,7 @@ class CPU {
                 if (register.get(args[0].trim()) == 0) value = 1;
                 else{
                     value = 0;
-                    pc = branch.get(args[1]);
+                    pc = branch.get(args[1]); // go to branch
                 }
                 return_register = args[1];
                 break;
