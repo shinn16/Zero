@@ -31,7 +31,7 @@ public class Main {
             while (fileReader.hasNextLine()){ // read the file to memory
                 String line = fileReader.nextLine();
                 line = line.trim();
-                memory.insert(line);
+                memory.insert_instruction(line);
             }
             // start timer
             start_time = System.currentTimeMillis();
