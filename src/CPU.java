@@ -9,7 +9,6 @@ import java.util.HashMap;
  */
 class CPU {
     private long CCT = 500; // clock cycle time in milliseconds
-    private ArithmeticLogicUnit ALU = new ArithmeticLogicUnit();
     private PipelineStage[] pipline = {new PipelineStage(0),
             new PipelineStage(1),
             new PipelineStage(2),
@@ -17,7 +16,6 @@ class CPU {
             new PipelineStage(4)};
     private boolean done = false;
     private int pc = 0;
-    private String[] instruction;
     private HashMap<String, Integer> register = new HashMap<>(), branch = new HashMap<>();
 
     CPU() {
@@ -60,17 +58,28 @@ class CPU {
         return pc++; // return pc val then increment to the next one
     }
 
-    void loadInstruction(String instruction) {
+    void instruction_fetch(String instruction) {
         try {
-            this.instruction = instruction.split("\t");
-            Wrapper wrapper = execute(this.instruction);
+            String[] instructions = instruction.split("\t");
+            Wrapper wrapper = execute(instructions);
             if (register.containsKey(wrapper.getRegister())) {
-                // todo put this in the proper place
-                register.put(wrapper.getRegister(), wrapper.getValue()); // write the register value
+               writeBack(wrapper);
             }
         }catch (NullPointerException | IndexOutOfBoundsException e){
             this.done = true;
         }
+    }
+
+    private Wrapper instruction_decode(){
+        return null;
+    }
+
+    private void memory_access(){
+
+    }
+
+    private void writeBack(Wrapper wrapper){
+            register.put(wrapper.getRegister(), wrapper.getValue()); // write the register value
     }
 
     private Wrapper execute(String[] instruction) {
@@ -151,7 +160,7 @@ class CPU {
                 // execute the instruction
                 return execute(Arrays.copyOfRange(instruction, 1, instruction.length));
         }
-        return new Wrapper(return_register, value, load, off_set);
+        return new Wrapper(return_register, value, load, off_set, 0);
     }
 
     boolean isDone(){
@@ -159,11 +168,6 @@ class CPU {
     }
 }
 
-class ArithmeticLogicUnit {
-    ArithmeticLogicUnit(){
-
-    }
-}
 
 /***
  * PipelineStage
@@ -244,13 +248,14 @@ enum Stage{
  */
 class Wrapper{
     private String register, offset;
-    private int value, load;
+    private int value, load, instruction;
 
-    Wrapper(String register, int value, int load, String offset){ // used for load/store operations
+    Wrapper(String register, int value, int load, String offset, int instruction){ // used for load/store operations
         this.register = register;
         this.value = value;
         this.load = load;
         this.offset = offset;
+        this.instruction = instruction;
     }
 
     String getRegister() {

@@ -40,7 +40,7 @@ public class Main {
             // todo remove debug
             int counter = 0;
             while(!cpu.isDone()){
-                cpu.loadInstruction(memory.getAtIndex(cpu.next_pc()));
+                cpu.instruction_fetch(memory.getAtIndex(cpu.next_pc()));
                 counter ++;
             }
             // stop timer
