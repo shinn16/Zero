@@ -37,15 +37,13 @@ public class Main {
             start_time = System.currentTimeMillis();
 
             // loading first instruction
-            // todo remove debug
-            int counter = 0;
+            int counter = 0; // todo remove debug
             while(!cpu.isDone()){
-                cpu.instruction_fetch(memory.getAtIndex(cpu.next_pc()));
+                cpu.run(memory.getAtIndex(cpu.next_pc()));
                 counter ++;
             }
             // stop timer
-            // todo remove debug
-            System.out.println(counter);
+            System.out.println(counter); // todo remove debug
             end_time = System.currentTimeMillis();
             System.out.println("Simulation finished in: " + df.format((end_time - start_time)*0.001) + " seconds.");
 
