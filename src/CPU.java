@@ -59,7 +59,7 @@ class CPU {
         return pc++; // return pc val then increment to the next one
     }
 
-    public void run(String instruction){
+    void run(String instruction){
 
     }
 
@@ -180,85 +180,36 @@ class CPU {
     }
 
     private Wrapper execute(Wrapper wrapper) {
-//        System.out.println(Arrays.toString(instruction));
-//        String return_register = "", off_set = "";
-//        String[] args = instruction[1].split(",");
-//        int value = 0, load = 0;
-//        switch (instruction[0].trim()) {
-//            case "ADD":
-//                return_register = args[0].trim();
-//                value = register.get(args[1].trim()) + register.get(args[2].trim());
-//                break;
-//            case "ADDI":
-//                return_register = args[0].trim();
-//                value = register.get(args[1].trim()) + Integer.parseInt(args[2].trim());
-//                break;
-//            case "SUB":
-//                return_register = args[0].trim();
-//                value = register.get(args[1].trim()) - register.get(args[2].trim());
-//                break;
-//            case "SUBI":
-//                return_register = args[0].trim();
-//                value = register.get(args[1].trim()) - Integer.parseInt(args[2].trim());
-//                break;
-//            case "MUL":
-//                return_register = args[0].trim();
-//                value = register.get(args[1].trim()) * register.get(args[2].trim());
-//                break;
-//            case "BEQ":
-//                if (register.get(args[0].trim()) == register.get(args[1].trim())) value = 1;
-//                else{
-//                    value = 0;
-//                    pc = branch.get(args[1]) -1; // go to branch
-//                }
-//                return_register = instruction[0]; // return register returned as branch to take
-//                break;
-//            case "BNE":
-//                if (register.get(args[0].trim()) != register.get(args[1].trim())) value = 1;
-//                else{
-//                    value = 0;
-//                    pc = branch.get(args[1]) -1; // go to branch
-//                }
-//                return_register = instruction[0]; // return register returned as branch to take
-//                break;
-//            case "BNEZ":
-//                if (register.get(args[0].trim()) == 0) value = 1;
-//                else{
-//                    value = 0;
-//                    pc = branch.get(args[1]) -1; // go to branch
-//                }
-//                return_register = args[1];
-//                break;
-//            case "JAL":
-//                break;
-//            case "LB":
-//                return_register = args[0];
-//                off_set = args[1];
-//                load = 1;
-//                break;
-//            case "SB":
-//                return_register = args[0];
-//                off_set = args[1];
-//                load = 2;
-//                break;
-//            case "LW":
-//                return_register = args[0];
-//                off_set = args[1];
-//                load = 1;
-//                break;
-//            case "SW":
-//                return_register = args[0];
-//                off_set = args[1];
-//                load = 2;
-//                break;
-//            default: // we are declaring a loop
-//                // record where the loop starts
-//                if (!branch.containsKey(instruction[0].trim())) branch.put(instruction[0].trim(), pc);
-//                // execute the instruction
-//                return execute(Arrays.copyOfRange(instruction, 1, instruction.length));
-//        }
-//        return new Wrapper();
-        return null;
+        switch (wrapper.getInstruction()) {
+            case 0: // ADD
+                wrapper.setSolution(wrapper.getValue()[0] + wrapper.getValue()[1]);
+                break;
+            case 1: // ADDI
+                wrapper.setSolution(wrapper.getValue()[0] + wrapper.getValue()[1]);
+                break;
+            case 2: // SUB
+                wrapper.setSolution(wrapper.getValue()[0] - wrapper.getValue()[1]);
+                break;
+            case 3: // SUBI
+                wrapper.setSolution(wrapper.getValue()[0] - wrapper.getValue()[1]);
+                break;
+            case 4: // MUL
+                wrapper.setSolution(wrapper.getValue()[0] * wrapper.getValue()[1]);
+                break;
+            case 5: // BEQ
+                if(wrapper.getValue()[0] != wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1; // go to branch
+                break;
+            case 6: // BNE
+                if(wrapper.getValue()[0] == wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1; // go to branch
+                break;
+            case 7: // BNEZ
+                if(wrapper.getValue()[0] != 0) pc = branch.get(wrapper.getLoop()) -1; // go to branch
+                break;
+            case 8: // JAL
+                break;
+            // all loads/stores are handled in memory_access
+        }
+        return wrapper;
     }
 
     boolean isDone(){
