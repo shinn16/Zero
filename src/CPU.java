@@ -18,10 +18,50 @@ class CPU {
     private int pc = 0;
     private String[] instruction_register;
     private HashMap<String, Integer> register = new HashMap<>(), branch = new HashMap<>();
+    private Memory memory = new Memory();
 
-    CPU() {
+    CPU(Memory memory) {
+        this.memory = memory;
+
         // creating the 32 registers
+        // i create both name reference and register reference so either can be used.
+
+        // these registers are called by register
         register.put("x0", 0);
+        register.put("x1", 0);
+        register.put("x2", 0);
+        register.put("x3", 0);
+        register.put("x4", 0);
+        register.put("x5", 0);
+        register.put("x6", 0);
+        register.put("x7", 0);
+        register.put("x8", 0);
+        register.put("x9", 0);
+        register.put("x10", 0);
+        register.put("x11", 0);
+        register.put("x12", 0);
+        register.put("x13", 0);
+        register.put("x14", 0);
+        register.put("x15", 0);
+        register.put("x16", 0);
+        register.put("x17", 0);
+        register.put("x18", 0);
+        register.put("x19", 0);
+        register.put("x20", 0);
+        register.put("x21", 0);
+        register.put("x22", 0);
+        register.put("x23", 0);
+        register.put("x24", 0);
+        register.put("x25", 0);
+        register.put("x26", 0);
+        register.put("x27", 0);
+        register.put("x28", 0);
+        register.put("x29", 0);
+        register.put("x30", 0);
+        register.put("x31", 0);
+
+        // the rest are all called by name
+        register.put("zero", 0);
         register.put("ra", 0);
         register.put("sp", 0);
         register.put("gp", 0);
@@ -56,22 +96,29 @@ class CPU {
     }
 
     int next_pc() {
+        pc %= 256;   // ensure we don't go out of memory
         return pc++; // return pc val then increment to the next one
     }
 
-    void run(String instruction){
-        instruction_fetch(instruction);
+    void run(){
+        // execute one clock cycle
+        instruction_fetch(memory.getInstruction(next_pc()));
         Wrapper wrapper = instruction_decode(this.instruction_register);
         wrapper = execute(wrapper);
+        memory_access(wrapper);
         write_back(wrapper);
+
+        // todo uncomment this section
+//        try{
+//            Thread.sleep(CCT); // simulated clock cycle time.
+//        }catch (InterruptedException e){
+//            e.printStackTrace();
+//        }
+
     }
 
     private void instruction_fetch(String instruction) {
-        try {
-            instruction_register = instruction.split("\t");
-        }catch (NullPointerException | IndexOutOfBoundsException e){ // this will end the program
-            this.done = true;
-        }
+        instruction_register = instruction.split("\t");
     }
 
     private Wrapper instruction_decode(String[] instruction_register){
@@ -81,105 +128,99 @@ class CPU {
         int value[] = new int[2];       // the value to be written to the return register
         int instruction = 0;            // stored decoded instruction value for the alu
         String loop = "";               // this stores loop to execute
-        String cleaned = "";            // used to clean the load/store indexing arguments
-
-        String[] args = instruction_register[1].split(","); // gets the arguments in array format
-
-        switch (instruction_register[0].trim()) {
-            case "ADD":
-                return_register = args[0].trim();
-                value[0] = register.get(args[1].trim());
-                value[1] = register.get(args[2].trim());
-                // we don't need to assign an instruction value here as it is already zero
-                break;
-            case "ADDI":
-                return_register = args[0].trim();
-                value[0] = register.get(args[1].trim());
-                value[1] = Integer.parseInt(args[2].trim());
-                instruction = 1;
-                break;
-            case "SUB":
-                return_register = args[0].trim();
-                value[0] = register.get(args[1].trim());
-                value[1] = register.get(args[2].trim());
-                instruction = 2;
-                break;
-            case "SUBI":
-                return_register = args[0].trim();
-                value[0] = register.get(args[1].trim());
-                value[1] = Integer.parseInt(args[2].trim());
-                instruction = 3;
-                break;
-            case "MUL":
-                return_register = args[0].trim();
-                value[0] = register.get(args[1].trim());
-                value[1] = Integer.parseInt(args[2].trim());
-                instruction = 4;
-                break;
-            case "BEQ":
-                value[0] = register.get(args[0].trim());
-                value[1] = register.get(args[1].trim());
-                loop = args[1].trim();
-                instruction = 5;
-                break;
-            case "BNE":
-                value[0] = register.get(args[0].trim());
-                value[1] = register.get(args[1].trim());
-                loop = args[1].trim();
-                instruction = 6;
-                break;
-            case "BNEZ":
-                value[0] = register.get(args[0].trim());
-                loop = args[1].trim();
-                instruction = 7;
-                break;
-            case "JAL":
-                instruction = 8;
-                break;
-            case "LB":
-                return_register = args[0];
-                cleaned = args[1].replace('(', ',').replace(")", "");
-                value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
-                value[1] = register.get(cleaned.split(",")[1].trim()); // offset
-                instruction = 9;
-                break;
-            case "SB":
-                return_register = args[0];
-                cleaned = args[1].replace('(', ',').replace(")", "");
-                value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
-                value[1] = register.get(cleaned.split(",")[1].trim()); // offset
-                instruction = 10;
-                break;
-            case "LW":
-                return_register = args[0];
-                cleaned = args[1].replace('(', ',').replace(")", "");
-                value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
-                value[1] = register.get(cleaned.split(",")[1].trim()); // offset
-                instruction = 11;
-                break;
-            case "SW":
-                return_register = args[0];
-                cleaned = args[1].replace('(', ',').replace(")", "");
-                value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
-                value[1] = register.get(cleaned.split(",")[1].trim()); // offset
-                instruction = 12;
-                break;
-            default: // we are declaring a loop
-                // record where the loop starts
-                if (!branch.containsKey(instruction_register[0].trim())) branch.put(instruction_register[0].trim(), pc);
-                // rerun decode without loop declaration in the instruction
-                return instruction_decode( Arrays.copyOfRange(instruction_register, 1, instruction_register.length));
+        String cleaned;                 // used to clean the load/store indexing arguments
+        try{
+            String[] args = instruction_register[1].split(","); // gets the arguments in array format
+            switch (instruction_register[0].trim()) {
+                case "ADD":
+                    return_register = args[0].trim();
+                    value[0] = register.get(args[1].trim());
+                    value[1] = register.get(args[2].trim());
+                    // we don't need to assign an instruction value here as it is already zero
+                    break;
+                case "ADDI":
+                    return_register = args[0].trim();
+                    value[0] = register.get(args[1].trim());
+                    value[1] = Integer.parseInt(args[2].trim());
+                    instruction = 1;
+                    break;
+                case "SUB":
+                    return_register = args[0].trim();
+                    value[0] = register.get(args[1].trim());
+                    value[1] = register.get(args[2].trim());
+                    instruction = 2;
+                    break;
+                case "SUBI":
+                    return_register = args[0].trim();
+                    value[0] = register.get(args[1].trim());
+                    value[1] = Integer.parseInt(args[2].trim());
+                    instruction = 3;
+                    break;
+                case "MUL":
+                    return_register = args[0].trim();
+                    value[0] = register.get(args[1].trim());
+                    value[1] = Integer.parseInt(args[2].trim());
+                    instruction = 4;
+                    break;
+                case "BEQ":
+                    value[0] = register.get(args[0].trim());
+                    value[1] = register.get(args[1].trim());
+                    loop = args[1].trim();
+                    instruction = 5;
+                    break;
+                case "BNE":
+                    value[0] = register.get(args[0].trim());
+                    value[1] = register.get(args[1].trim());
+                    loop = args[1].trim();
+                    instruction = 6;
+                    break;
+                case "BNEZ":
+                    value[0] = register.get(args[0].trim());
+                    loop = args[1].trim();
+                    instruction = 7;
+                    break;
+                case "JAL":
+                    instruction = 8;
+                    break;
+                case "LB":
+                    return_register = args[0];
+                    cleaned = args[1].replace('(', ',').replace(")", "");
+                    value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
+                    value[1] = register.get(cleaned.split(",")[1].trim()); // offset
+                    instruction = 9;
+                    break;
+                case "SB":
+                    return_register = args[0];
+                    cleaned = args[1].replace('(', ',').replace(")", "");
+                    value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
+                    value[1] = register.get(cleaned.split(",")[1].trim()); // offset
+                    instruction = 10;
+                    break;
+                case "LW":
+                    return_register = args[0];
+                    cleaned = args[1].replace('(', ',').replace(")", "");
+                    value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
+                    value[1] = register.get(cleaned.split(",")[1].trim()); // offset
+                    instruction = 11;
+                    break;
+                case "SW":
+                    return_register = args[0];
+                    cleaned = args[1].replace('(', ',').replace(")", "");
+                    value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
+                    value[1] = register.get(cleaned.split(",")[1].trim()); // offset
+                    instruction = 12;
+                    break;
+                default: // we are declaring a loop
+                    // record where the loop starts
+                    if (!branch.containsKey(instruction_register[0].trim())) branch.put(instruction_register[0].trim(), pc);
+                    // rerun decode without loop declaration in the instruction
+                    return instruction_decode( Arrays.copyOfRange(instruction_register, 1, instruction_register.length));
+            }
+        }catch (NullPointerException | IndexOutOfBoundsException e){ // this will end the program
+            this.done = true; // there are no more instructions to fetch, finish what is in the pipeline then end.
+            // todo finish pipeline
         }
         return new Wrapper(return_register, value, instruction, loop);
-    }
-
-    private void memory_access(){
-
-    }
-
-    private void write_back(Wrapper wrapper){
-        // write the register value if it exists
-            if (wrapper.getSolution() != null )register.put(wrapper.getRegister(), wrapper.getSolution());
     }
 
     private Wrapper execute(Wrapper wrapper) {
@@ -200,13 +241,16 @@ class CPU {
                 wrapper.setSolution(wrapper.getValue()[0] * wrapper.getValue()[1]);
                 break;
             case 5: // BEQ
-                if(wrapper.getValue()[0] != wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1; // go to branch
+                // if the condition is true, go to the branch by changing the pc value
+                if(wrapper.getValue()[0] != wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1;
                 break;
             case 6: // BNE
-                if(wrapper.getValue()[0] == wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1; // go to branch
+                // if the condition is true, go to the branch by changing the pc value
+                if(wrapper.getValue()[0] == wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1;
                 break;
             case 7: // BNEZ
-                if(wrapper.getValue()[0] != 0) pc = branch.get(wrapper.getLoop()) -1; // go to branch
+                // if the condition is true, go to the branch by changing the pc value
+                if(wrapper.getValue()[0] != 0) pc = branch.get(wrapper.getLoop()) -1;
                 break;
             case 8: // JAL
                 break;
@@ -215,121 +259,33 @@ class CPU {
         return wrapper;
     }
 
-    boolean isDone(){
-        return done;
-    }
-}
-
-
-/***
- * PipelineStage
- *
- * Represents the RISC V pipeline stages
- */
-class PipelineStage {
-    private boolean inUse = false;
-    private String instruction;
-    private Stage stage;
-
-    PipelineStage(int stage){
-        switch (stage){
-            case 0:
-                this.stage = Stage.IF;
+    private void memory_access(Wrapper wrapper){
+        switch (wrapper.getInstruction()){
+            case 9:  // LB
+                register.put(wrapper.getRegister(), // write value to register
+                        Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1])));
                 break;
-            case 1:
-                this.stage = Stage.ID;
-            case 2:
-                this.stage = Stage.EX;
-            case 3:
-                this.stage = Stage.MEM;
-            case 4:
-                this.stage = Stage.WB;
+            case 10: // SB
+                memory.insert_data(String.valueOf(register.get(wrapper.getRegister())), // write value to memory
+                        wrapper.getValue()[0], wrapper.getValue()[1]);
+                break;
+            case 11: // LW
+                register.put(wrapper.getRegister(), // write value to register
+                        Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1])));
+                break;
+            case 12: // SW
+                memory.insert_data(String.valueOf(register.get(wrapper.getRegister())), // write value to memory
+                        wrapper.getValue()[0], wrapper.getValue()[1]);
+                break;
         }
     }
 
-    String getInstruction() {
-        return instruction;
+    private void write_back(Wrapper wrapper){
+        // write the register value if it exists
+        if (wrapper.getSolution() != null )register.put(wrapper.getRegister(), wrapper.getSolution());
     }
 
-    void setInstruction(String instruction) {
-        this.instruction = instruction;
+    boolean isDone(){
+        return done;
     }
-
-    boolean isInUse() {
-        return inUse;
-    }
-
-    void lock(){
-        this.inUse = true;
-    }
-
-    void unlock(){
-        this.inUse = false;
-    }
-
-    String getStage() {
-        return stage.getName();
-    }
-}
-
-
-/***
- * Stage
- *
- * enumerated stage names for convenience.
- */
-enum Stage{
-    IF ("Instruction Fetch"),
-    ID ("Instruction Decode"),
-    EX ("Execution"),
-    MEM ("Memory Access"),
-    WB ("Cache Write Back");
-
-    private String name;
-    Stage(String name) {
-        this.name = name;
-    }
-
-    String getName() {
-        return name;
-    }
-}
-
-/***
- * Simple wrapper for register/data pairs that will make my life easier
- */
-class Wrapper{
-    private String register, loop;
-    private int instruction;
-    private Integer solution; // using the Integer class allows for null evaluation, int does not.
-    private int[] value;
-
-    Wrapper(String register, int[] value, int instruction, String loop){
-        this.register = register;
-        this.value = value;
-        this.instruction = instruction;
-
-        this.loop = loop;
-    }
-
-    String getRegister() {
-        return register;
-    }
-
-    void setSolution(Integer solution){
-        this.solution = solution;
-    }
-
-    Integer getSolution(){
-        return solution;
-    }
-
-    int[] getValue() {
-        return value;
-    }
-
-
-    int getInstruction(){ return instruction; }
-
-    String getLoop(){ return loop; }
 }

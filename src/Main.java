@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args){
         // instantiating machine hardware
         Memory memory = new Memory();
-        CPU cpu = new CPU();
+        CPU cpu = new CPU(memory);
 
         // other variables needed for simulation
         Scanner scanner = new Scanner(System.in);
@@ -33,13 +33,14 @@ public class Main {
                 line = line.trim();
                 memory.insert_instruction(line);
             }
+            memory.setData_memory_start(); // instructions have been loaded, mark start of data memory
             // start timer
             start_time = System.currentTimeMillis();
 
             // loading first instruction
             int counter = 0; // todo remove debug
             while(!cpu.isDone()){
-                cpu.run(memory.getAtIndex(cpu.next_pc()));
+                cpu.run();
                 counter ++;
             }
             // stop timer
