@@ -26,30 +26,24 @@ public class Main {
         try{
             // load the program file to memory
             // String fileName = scanner.nextLine();
-            String fileName = "program.txt";
+            String fileName = "program.txt"; // todo uncomment lines above and delete these lines
             fileReader = new Scanner(new File(fileName));
-            while (fileReader.hasNextLine()){ // read the file to memory
+            while (fileReader.hasNextLine()){        // read the file to memory
                 String line = fileReader.nextLine();
                 line = line.trim();
                 memory.insert_instruction(line);
             }
-            memory.setData_memory_start(); // instructions have been loaded, mark start of data memory
-            // start timer
-            start_time = System.currentTimeMillis();
-
-            // loading first instruction
+            memory.setData_memory_start();           // instructions have been loaded, mark start of data memory
+            start_time = System.currentTimeMillis(); // start timer
             int counter = 0; // todo remove debug
-            while(!cpu.isDone()){
+            while(!cpu.isDone()){                    // starting machine
                 cpu.run();
-                counter ++;
+                counter ++; // todo remove debug
             }
             // stop timer
             System.out.println(counter); // todo remove debug
             end_time = System.currentTimeMillis();
             System.out.println("Simulation finished in: " + df.format((end_time - start_time)*0.001) + " seconds.");
-
-
-
 
         }catch (FileNotFoundException e){
             System.out.println("That file does not exist. Please restart Zero and try again.\n" +
