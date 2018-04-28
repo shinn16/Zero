@@ -95,7 +95,7 @@ class CPU {
         register.put("t6", 0);
     }
 
-    int next_pc() {
+    private int next_pc() {
         pc %= 256;   // ensure we don't go out of memory
         return pc++; // return pc val then increment to the next one
     }

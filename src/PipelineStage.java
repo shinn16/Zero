@@ -10,6 +10,7 @@ class PipelineStage {
     private boolean inUse = false;
     private String instruction;
     private Stage stage;
+    private Wrapper wrapper;
 
     PipelineStage(int stage){
         switch (stage){
@@ -29,6 +30,14 @@ class PipelineStage {
 
     String getInstruction() {
         return instruction;
+    }
+
+    void setWrapper(Wrapper wrapper){
+        this.wrapper = wrapper;
+    }
+
+    Wrapper getWrapper(){
+        return wrapper;
     }
 
     void setInstruction(String instruction) {
