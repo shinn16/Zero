@@ -60,7 +60,10 @@ class CPU {
     }
 
     void run(String instruction){
-
+        instruction_fetch(instruction);
+        Wrapper wrapper = instruction_decode(this.instruction_register);
+        wrapper = execute(wrapper);
+        write_back(wrapper);
     }
 
     private void instruction_fetch(String instruction) {
@@ -114,20 +117,20 @@ class CPU {
                 instruction = 4;
                 break;
             case "BEQ":
-                value[0] = register.get(args[1].trim());
-                value[1] = register.get(args[2].trim());
-                loop = args[3].trim();
+                value[0] = register.get(args[0].trim());
+                value[1] = register.get(args[1].trim());
+                loop = args[1].trim();
                 instruction = 5;
                 break;
             case "BNE":
-                value[0] = register.get(args[1].trim());
-                value[1] = register.get(args[2].trim());
-                loop = args[3].trim();
+                value[0] = register.get(args[0].trim());
+                value[1] = register.get(args[1].trim());
+                loop = args[1].trim();
                 instruction = 6;
                 break;
             case "BNEZ":
-                value[0] = register.get(args[1].trim());
-                loop = args[2].trim();
+                value[0] = register.get(args[0].trim());
+                loop = args[1].trim();
                 instruction = 7;
                 break;
             case "JAL":
@@ -137,28 +140,28 @@ class CPU {
                 return_register = args[0];
                 cleaned = args[1].replace('(', ',').replace(")", "");
                 value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
-                value[1] = Integer.parseInt(cleaned.split(",")[1].trim()); // offset
+                value[1] = register.get(cleaned.split(",")[1].trim()); // offset
                 instruction = 9;
                 break;
             case "SB":
                 return_register = args[0];
                 cleaned = args[1].replace('(', ',').replace(")", "");
                 value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
-                value[1] = Integer.parseInt(cleaned.split(",")[1].trim()); // offset
+                value[1] = register.get(cleaned.split(",")[1].trim()); // offset
                 instruction = 10;
                 break;
             case "LW":
                 return_register = args[0];
                 cleaned = args[1].replace('(', ',').replace(")", "");
                 value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
-                value[1] = Integer.parseInt(cleaned.split(",")[1].trim()); // offset
+                value[1] = register.get(cleaned.split(",")[1].trim()); // offset
                 instruction = 11;
                 break;
             case "SW":
                 return_register = args[0];
                 cleaned = args[1].replace('(', ',').replace(")", "");
                 value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
-                value[1] = Integer.parseInt(cleaned.split(",")[1].trim()); // offset
+                value[1] = register.get(cleaned.split(",")[1].trim()); // offset
                 instruction = 12;
                 break;
             default: // we are declaring a loop
@@ -174,7 +177,7 @@ class CPU {
 
     }
 
-    private void writeBack(Wrapper wrapper){
+    private void write_back(Wrapper wrapper){
         // write the register value if it exists
             if (wrapper.getSolution() != null )register.put(wrapper.getRegister(), wrapper.getSolution());
     }
