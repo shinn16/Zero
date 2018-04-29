@@ -44,6 +44,9 @@ public class Main {
             System.out.println(counter); // todo remove debug
             end_time = System.currentTimeMillis();
             System.out.println("Simulation finished in: " + df.format((end_time - start_time)*0.001) + " seconds.");
+            System.out.print("Writing log file. please wait...");
+            System.out.println("Done!\n" +
+                    "Zero is shutting down.");
 
         }catch (FileNotFoundException e){
             System.out.println("That file does not exist. Please restart Zero and try again.\n" +

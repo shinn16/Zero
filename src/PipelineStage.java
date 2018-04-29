@@ -10,7 +10,7 @@ class PipelineStage {
     private boolean inUse = false;
     private String instruction;
     private Stage stage;
-    private Wrapper wrapper;
+    private DataBus dataBus;
 
     PipelineStage(int stage){
         switch (stage){
@@ -32,12 +32,12 @@ class PipelineStage {
         return instruction;
     }
 
-    void setWrapper(Wrapper wrapper){
-        this.wrapper = wrapper;
+    void setDataBus(DataBus dataBus){
+        this.dataBus = dataBus;
     }
 
-    Wrapper getWrapper(){
-        return wrapper;
+    DataBus getDataBus(){
+        return dataBus;
     }
 
     void setInstruction(String instruction) {

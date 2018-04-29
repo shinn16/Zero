@@ -8,7 +8,7 @@ import java.util.HashMap;
  * @version 4/21/18
  */
 class CPU {
-    private long CCT = 50; // clock cycle time in milliseconds
+    private long CCT = 500; // clock cycle time in milliseconds
     private PipelineStage[] pipline = {new PipelineStage(0),
             new PipelineStage(1),
             new PipelineStage(2),
@@ -21,6 +21,15 @@ class CPU {
     private HashMap<String, Integer> branch = new HashMap<>();
     private Memory memory = new Memory();
 
+    /**
+     * The CPU constructor essentially creates and populates the registers.
+     * This includes making the ability to registers by either name or by
+     * register. However one scheme or the other should be used as the calling
+     * a1 and then calling x10 would result in different values due to each register
+     * being its own discrete structure in this program.
+     *
+     * @param memory Memory
+     */
     CPU(Memory memory) {
         this.memory = memory;
         Integer[] ints = {0,0};
@@ -96,53 +105,60 @@ class CPU {
         register.put("t6", ints);
     }
 
+    /**
+     * Increments the pc value.
+     * @return incremented pc value.
+     */
     private int next_pc() {
         pc %= 256;   // ensure we don't go out of memory
         return pc++; // return pc val then increment to the next one
     }
 
+    /***
+     * Simulates one clock cycle with the pipeline.
+     */
     void run(){
         // handling write back
         try{
-            write_back(pipline[4].getWrapper());
+            write_back(pipline[4].getDataBus());
         }catch (NullPointerException e){
             // this is expected when the pipeline is being populated
         }
         pipline[4].unlock(); // unlock for writing
-        pipline[4].setWrapper(pipline[3].getWrapper());
+        pipline[4].setDataBus(pipline[3].getDataBus());
         pipline[4].lock();   // lock until value is used
 
         // handling memory access
         try{
-            memory_access(pipline[3].getWrapper());
+            memory_access(pipline[3].getDataBus());
         }catch (NullPointerException e){
             // this is expected when the pipeline is being populated
         }
         pipline[3].unlock(); // unlock for writing
-        pipline[3].setWrapper(pipline[2].getWrapper());
+        pipline[3].setDataBus(pipline[2].getDataBus());
         pipline[3].lock();   // lock until value is used
 
        // handling execution
         try{
-           execute(pipline[2].getWrapper());
+           execute(pipline[2].getDataBus());
         }catch (NullPointerException e){
             // this is expected when the pipeline is being populated
         }
         pipline[2].unlock(); // unlock for writing
-        pipline[2].setWrapper(pipline[1].getWrapper());
+        pipline[2].setDataBus(pipline[1].getDataBus());
         pipline[2].lock();   // lock until value is used
 
         // handling instruction decode
         try{
-            pipline[1].setWrapper(instruction_decode(instruction_register));
+            pipline[1].setDataBus(instruction_decode(instruction_register));
             // todo handle locking here and stalling
         }catch (NullPointerException e){
             // this is expected when the pipeline is being populated
         }
 
+        // handling instruction fetch
         instruction_fetch(memory.getInstruction(next_pc()));
 
-        // todo uncomment this section
         try{
             Thread.sleep(CCT); // simulated clock cycle time.
         }catch (InterruptedException e){
@@ -151,13 +167,28 @@ class CPU {
 
     }
 
+    /***
+     * Instruction fetch gets an instruction string out of the memory,
+     * splits it into a string array, then writes it to the instruction register.
+     *
+     * @param instruction String: instruction to be decoded
+     */
     private void instruction_fetch(String instruction) {
         instruction_register = instruction.split("\t");
     }
 
-    private Wrapper instruction_decode(String[] instruction_register){
+    /***
+     * Instruction decode is responsible for parsing the assembly code,
+     * fetching all needed data for code execution, and checking for data hazards
+     * that could occur from accessing the data. This method also puts a lock on registers
+     * that are being used to return data and will take a branch preemptively. The execute
+     * stage will check for correctness and correct the instruction fetch if necessary.
+     *
+     * @param instruction_register String Array: instruction register value
+     * @return DataBus: data wrapper to make things easier. This could by seen as a bus.
+     */
+    private DataBus instruction_decode(String[] instruction_register){
         System.out.println(Arrays.toString(instruction_register)); // todo debug remove
-
         String return_register = "";              // will store the register to write data to
         int value[] = new int[2];                 // the value to be written to the return register
         int instruction = 0;                      // stored decoded instruction value for the alu
@@ -297,104 +328,155 @@ class CPU {
             }
         }catch (IndexOutOfBoundsException e){ // this will end the program
             this.done = true; // there are no more instructions to fetch, finish what is in the pipeline then end.
-            // todo finish pipeline
         }catch (NullPointerException e){
             // this is expected during a stall
         }
-        return new Wrapper(return_register, value, instruction, loop);
+        return new DataBus(return_register, value, instruction, loop);
     }
 
-    private Wrapper execute(Wrapper wrapper) {
-        switch (wrapper.getInstruction()) {
+    /**
+     * This simulates the ALU. Execute is responsible for all computations.
+     * @param dataBus DataBus: dataBus generated by instruction decode.
+     * @return DataBus: updated version of the input dataBus.
+     */
+    private DataBus execute(DataBus dataBus) {
+        switch (dataBus.getInstruction()) {
             case 0: // ADD
-                wrapper.setSolution(wrapper.getValue()[0] + wrapper.getValue()[1]);
+                dataBus.setSolution(dataBus.getValue()[0] + dataBus.getValue()[1]);
                 break;
             case 1: // ADDI
-                wrapper.setSolution(wrapper.getValue()[0] + wrapper.getValue()[1]);
+                dataBus.setSolution(dataBus.getValue()[0] + dataBus.getValue()[1]);
                 break;
             case 2: // SUB
-                wrapper.setSolution(wrapper.getValue()[0] - wrapper.getValue()[1]);
+                dataBus.setSolution(dataBus.getValue()[0] - dataBus.getValue()[1]);
                 break;
             case 3: // SUBI
-                wrapper.setSolution(wrapper.getValue()[0] - wrapper.getValue()[1]);
+                dataBus.setSolution(dataBus.getValue()[0] - dataBus.getValue()[1]);
                 break;
             case 4: // MUL
-                wrapper.setSolution(wrapper.getValue()[0] * wrapper.getValue()[1]);
+                dataBus.setSolution(dataBus.getValue()[0] * dataBus.getValue()[1]);
                 break;
-            // branching is handled in instruction decode
+
+            /*
+                Branching is handled in instruction decode, here we are ensuring we took
+                the right branch and correcting the error if not. Please note that if we
+                have to correct the branch, it will result in a stall cycle.
+             */
             case 5: // BEQ
-                // if the condition is true, go to the branch by changing the pc value
-                if(wrapper.getValue()[0] != wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1;
+                // if the condition is false, reset the pc value and flush IF and ID
+                if(dataBus.getValue()[0] == dataBus.getValue()[1]) {
+                    pc = temp_pc;                // reset pc val to before preemptive branch
+                    pipline[1].setDataBus(null); // flush ID
+                    instruction_register = null; // flush IF
+                }
                 break;
             case 6: // BNE
-                // if the condition is true, go to the branch by changing the pc value
-                if(wrapper.getValue()[0] == wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1;
+                // if the condition is false, reset the pc value and flush IF and ID
+                if(dataBus.getValue()[0] != dataBus.getValue()[1]) {
+                    pc = temp_pc;                // reset pc val to before preemptive branch
+                    pipline[1].setDataBus(null); // flush ID
+                    instruction_register = null; // flush IF
+                }
                 break;
             case 7: // BNEZ
                 // if the condition is false, reset the pc value and flush IF and ID
-                if(wrapper.getValue()[0] == 0){
+                if(dataBus.getValue()[0] == 0){
                     pc = temp_pc;                // reset pc val to before preemptive branch
-                    pipline[1].setWrapper(null); // flush ID
+                    pipline[1].setDataBus(null); // flush ID
                     instruction_register = null; // flush IF
                 }
                 break;
             case 8: // JAL
                 break;
+
             // all loads/stores are handled in memory_access
         }
-        return wrapper;
+        return dataBus;
     }
 
-    private void memory_access(Wrapper wrapper){
+    /***
+     * Memory access handles all stores and loads.
+     * Once finished, any locked return registers will
+     * be unlocked allowing any stalled stages that depend
+     * on the register to advance.
+     *
+     * @param dataBus DataBus: output of execute
+     */
+    private void memory_access(DataBus dataBus){
         Integer[] solution = new Integer[2];
-        switch (wrapper.getInstruction()){
+        switch (dataBus.getInstruction()){
             case 9:  // LB
-                solution[0] = Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1]));
+                solution[0] = Integer.parseInt(memory.getdata(dataBus.getValue()[0], dataBus.getValue()[1]));
                 solution[1] = 0;
-                register.put(wrapper.getRegister(),solution); // write value to register
+                register.put(dataBus.getRegister(),solution); // write value to register
                 break;
             case 10: // SB
-                memory.insert_data(String.valueOf(register.get(wrapper.getRegister())[0]), // write value to memory
-                        wrapper.getValue()[0], wrapper.getValue()[1]);
+                memory.insert_data(String.valueOf(register.get(dataBus.getRegister())[0]), // write value to memory
+                        dataBus.getValue()[0], dataBus.getValue()[1]);
                 break;
             case 11: // LW
-                solution[0] = Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1]));
+                solution[0] = Integer.parseInt(memory.getdata(dataBus.getValue()[0], dataBus.getValue()[1]));
                 solution[1] = 0;
-                register.put(wrapper.getRegister(),solution); // write value to register
+                register.put(dataBus.getRegister(),solution); // write value to register
                 break;
             case 12: // SW
-                memory.insert_data(String.valueOf(register.get(wrapper.getRegister())[0]), // write value to memory
-                        wrapper.getValue()[0], wrapper.getValue()[1]);
+                memory.insert_data(String.valueOf(register.get(dataBus.getRegister())[0]), // write value to memory
+                        dataBus.getValue()[0], dataBus.getValue()[1]);
                 break;
         }
     }
 
-    private void write_back(Wrapper wrapper){
+    /***
+     * Write back handles all register value updates. This also unlocks the
+     * locked return register allowing a dependent stage to advance.
+     *
+     * @param dataBus DataBus: output of execute.
+     */
+    private void write_back(DataBus dataBus){
         // write the register value if it exists
-        Integer[] solution = {wrapper.getSolution(), 0}; // write the solution and unlock the register for use
-        if (wrapper.getSolution() != null )register.put(wrapper.getRegister(), solution);
+        Integer[] solution = {dataBus.getSolution(), 0}; // write the solution and unlock the register for use
+        if (dataBus.getSolution() != null )register.put(dataBus.getRegister(), solution);
     }
 
+    /**
+     * Check for a lock on a single register
+     *
+     * @param register String: register name/register
+     * @return boolean: true if locked, false if not
+     */
     private boolean register_lock(String register){
         if (this.register.get(register)[1] == 1){ // data hazard
             pc --;
-            pipline[1].setWrapper(null); // flush ID
+            pipline[1].setDataBus(null); // flush ID
             instruction_register = null; // flush IF
             return true;
         }
         return false;
     }
 
+    /**
+     * Check for a lock on two registers.
+     *
+     * @param register1 String: register name/register
+     * @param register2 String: register name/register
+     * @return boolean: true if locked, false if not
+     */
     private boolean register_lock(String register1, String register2){
         if (register.get(register1)[1] == 1 || register.get(register2)[1] == 1 ){ // data hazard
             pc --;                       // decrement the pc
-            pipline[1].setWrapper(null); // flush ID
+            pipline[1].setDataBus(null); // flush ID
             instruction_register = null; // flush IF
             return true;
         }
         return false;
     }
 
+    /**
+     * Allows the Main class to determine if the cpu is done
+     * executing the assembly script.
+     *
+     * @return boolean done
+     */
     boolean isDone(){
         return done;
     }
