@@ -15,84 +15,85 @@ class CPU {
             new PipelineStage(3),
             new PipelineStage(4)};
     private boolean done = false;
-    private int pc = 0;
+    private int pc = 0, temp_pc = 0;
     private String[] instruction_register;
-    private HashMap<String, Integer> register = new HashMap<>(), branch = new HashMap<>();
+    private HashMap<String, Integer[]> register = new HashMap<>();
+    private HashMap<String, Integer> branch = new HashMap<>();
     private Memory memory = new Memory();
 
     CPU(Memory memory) {
         this.memory = memory;
-
+        Integer[] ints = {0,0};
         // creating the 32 registers
         // i create both name reference and register reference so either can be used.
 
         // these registers are called by register
-        register.put("x0", 0);
-        register.put("x1", 0);
-        register.put("x2", 0);
-        register.put("x3", 0);
-        register.put("x4", 0);
-        register.put("x5", 0);
-        register.put("x6", 0);
-        register.put("x7", 0);
-        register.put("x8", 0);
-        register.put("x9", 0);
-        register.put("x10", 0);
-        register.put("x11", 0);
-        register.put("x12", 0);
-        register.put("x13", 0);
-        register.put("x14", 0);
-        register.put("x15", 0);
-        register.put("x16", 0);
-        register.put("x17", 0);
-        register.put("x18", 0);
-        register.put("x19", 0);
-        register.put("x20", 0);
-        register.put("x21", 0);
-        register.put("x22", 0);
-        register.put("x23", 0);
-        register.put("x24", 0);
-        register.put("x25", 0);
-        register.put("x26", 0);
-        register.put("x27", 0);
-        register.put("x28", 0);
-        register.put("x29", 0);
-        register.put("x30", 0);
-        register.put("x31", 0);
+        register.put("x0", ints);
+        register.put("x1", ints);
+        register.put("x2", ints);
+        register.put("x3", ints);
+        register.put("x4", ints);
+        register.put("x5", ints);
+        register.put("x6", ints);
+        register.put("x7", ints);
+        register.put("x8", ints);
+        register.put("x9", ints);
+        register.put("x10", ints);
+        register.put("x11", ints);
+        register.put("x12", ints);
+        register.put("x13", ints);
+        register.put("x14", ints);
+        register.put("x15", ints);
+        register.put("x16", ints);
+        register.put("x17", ints);
+        register.put("x18", ints);
+        register.put("x19", ints);
+        register.put("x20", ints);
+        register.put("x21", ints);
+        register.put("x22", ints);
+        register.put("x23", ints);
+        register.put("x24", ints);
+        register.put("x25", ints);
+        register.put("x26", ints);
+        register.put("x27", ints);
+        register.put("x28", ints);
+        register.put("x29", ints);
+        register.put("x30", ints);
+        register.put("x31", ints);
 
         // the rest are all called by name
-        register.put("zero", 0);
-        register.put("ra", 0);
-        register.put("sp", 0);
-        register.put("gp", 0);
-        register.put("tp", 0);
-        register.put("t0", 0);
-        register.put("t1", 0);
-        register.put("t2", 0);
-        register.put("s0", 0);
-        register.put("s1", 0);
-        register.put("a0", 0);
-        register.put("a1", 0);
-        register.put("a2", 0);
-        register.put("a3", 0);
-        register.put("a4", 0);
-        register.put("a5", 0);
-        register.put("a6", 0);
-        register.put("a7", 0);
-        register.put("s2", 0);
-        register.put("s3", 0);
-        register.put("s4", 0);
-        register.put("s5", 0);
-        register.put("s6", 0);
-        register.put("s7", 0);
-        register.put("s8", 0);
-        register.put("s9", 0);
-        register.put("s10", 0);
-        register.put("s11", 0);
-        register.put("t3", 0);
-        register.put("t4", 0);
-        register.put("t5", 0);
-        register.put("t6", 0);
+        register.put("zero", ints);
+        register.put("ra", ints);
+        register.put("sp", ints);
+        register.put("gp", ints);
+        register.put("tp", ints);
+        register.put("t0", ints);
+        register.put("t1", ints);
+        register.put("t2", ints);
+        register.put("s0", ints);
+        register.put("s1", ints);
+        register.put("a0", ints);
+        register.put("a1", ints);
+        register.put("a2", ints);
+        register.put("a3", ints);
+        register.put("a4", ints);
+        register.put("a5", ints);
+        register.put("a6", ints);
+        register.put("a7", ints);
+        register.put("s2", ints);
+        register.put("s3", ints);
+        register.put("s4", ints);
+        register.put("s5", ints);
+        register.put("s6", ints);
+        register.put("s7", ints);
+        register.put("s8", ints);
+        register.put("s9", ints);
+        register.put("s10", ints);
+        register.put("s11", ints);
+        register.put("t3", ints);
+        register.put("t4", ints);
+        register.put("t5", ints);
+        register.put("t6", ints);
     }
 
     private int next_pc() {
@@ -166,92 +167,142 @@ class CPU {
     private Wrapper instruction_decode(String[] instruction_register){
         System.out.println(Arrays.toString(instruction_register)); // todo debug remove
 
-        String return_register = "";    // will store the register to write data to
-        int value[] = new int[2];       // the value to be written to the return register
-        int instruction = 0;            // stored decoded instruction value for the alu
-        String loop = "";               // this stores loop to execute
-        String cleaned;                 // used to clean the load/store indexing arguments
+        String return_register = "";              // will store the register to write data to
+        int value[] = new int[2];                 // the value to be written to the return register
+        int instruction = 0;                      // stored decoded instruction value for the alu
+        String loop = "";                         // this stores loop to execute
+        String cleaned;                           // used to clean the load/store indexing arguments
+        Integer[] register_lock = new Integer[2]; // used to lock registers to prevent data hazards
         try{
             String[] args = instruction_register[1].split(","); // gets the arguments in array format
             switch (instruction_register[0].trim()) {
                 case "ADD":
                     return_register = args[0].trim();
-                    value[0] = register.get(args[1].trim());
-                    value[1] = register.get(args[2].trim());
+                    register_lock[0] = register.get(return_register)[0];    // saved register value
+                    register_lock[1] = 1;                                   // locked register data
+                    register.put(return_register, register_lock);           // applying lock
+                    if (register.get(args[1])[1] == 1 || register.get(args[2])[1] == 1 ){ // data hazard
+                        pc --;                       // decrement the pc
+                        pipline[1].setWrapper(null); // flush ID
+                        instruction_register = null; // flush IF
+                        return null;
+                    }
+                    value[0] = register.get(args[1].trim())[0];
+                    value[1] = register.get(args[2].trim())[0];
                     // we don't need to assign an instruction value here as it is already zero
                     break;
                 case "ADDI":
                     return_register = args[0].trim();
-                    value[0] = register.get(args[1].trim());
+                    register_lock[0] = register.get(return_register)[0];    // saved register value
+                    register_lock[1] = 1;                                   // locked register data
+                    register.put(return_register, register_lock);           // applying lock
+                    if (register.get(args[1])[1] == 1 || register.get(args[2])[1] == 1 ){ // data hazard
+                        pc --;                       // decrement the pc
+                        pipline[1].setWrapper(null); // flush ID
+                        instruction_register = null; // flush IF
+                        return null;
+                    }
+                    value[0] = register.get(args[1].trim())[0];
                     value[1] = Integer.parseInt(args[2].trim());
                     instruction = 1;
                     break;
                 case "SUB":
                     return_register = args[0].trim();
-                    value[0] = register.get(args[1].trim());
-                    value[1] = register.get(args[2].trim());
+                    register_lock[0] = register.get(return_register)[0];    // saved register value
+                    register_lock[1] = 1;                                   // locked register data
+                    register.put(return_register, register_lock);           // applying lock
+                    if (register.get(args[1])[1] == 1 || register.get(args[2])[1] == 1 ){ // data hazard
+                        pc --;                       // decrement the pc
+                        pipline[1].setWrapper(null); // flush ID
+                        instruction_register = null; // flush IF
+                        return null;
+                    }
+                    value[0] = register.get(args[1].trim())[0];
+                    value[1] = register.get(args[2].trim())[0];
                     instruction = 2;
                     break;
                 case "SUBI":
                     return_register = args[0].trim();
-                    value[0] = register.get(args[1].trim());
+                    register_lock[0] = register.get(return_register)[0];    // saved register value
+                    register_lock[1] = 1;                                   // locked register data
+                    register.put(return_register, register_lock);           // applying lock
+                    value[0] = register.get(args[1].trim())[0];
                     value[1] = Integer.parseInt(args[2].trim());
                     instruction = 3;
                     break;
                 case "MUL":
                     return_register = args[0].trim();
-                    value[0] = register.get(args[1].trim());
+                    register_lock[0] = register.get(return_register)[0];    // saved register value
+                    register_lock[1] = 1;                                   // locked register data
+                    register.put(return_register, register_lock);           // applying lock
+                    value[0] = register.get(args[1].trim())[0];
                     value[1] = Integer.parseInt(args[2].trim());
                     instruction = 4;
                     break;
                 case "BEQ":
-                    value[0] = register.get(args[0].trim());
-                    value[1] = register.get(args[1].trim());
+                    value[0] = register.get(args[0].trim())[0];
+                    value[1] = register.get(args[1].trim())[0];
                     loop = args[1].trim();
                     instruction = 5;
+                    temp_pc = pc;                // make a copy of the current pc
+                    pc = branch.get(args[1]) -1; // preemptive take branch
                     break;
                 case "BNE":
-                    value[0] = register.get(args[0].trim());
-                    value[1] = register.get(args[1].trim());
+                    value[0] = register.get(args[0].trim())[0];
+                    value[1] = register.get(args[1].trim())[0];
                     loop = args[1].trim();
                     instruction = 6;
+                    temp_pc = pc;                // make a copy of the current pc
+                    pc = branch.get(args[1]) -1; // preemptive take branch
                     break;
                 case "BNEZ":
-                    value[0] = register.get(args[0].trim());
+                    value[0] = register.get(args[0].trim())[0];
                     loop = args[1].trim();
                     instruction = 7;
-                    // attempting to fix early stopping
-                    if(register.get(args[0].trim()) != 0) pc = branch.get(args[1]) -1;
+                    temp_pc = pc;                // make a copy of the current pc
+                    pc = branch.get(args[1]) -1; // preemptive take branch
                     break;
                 case "JAL":
                     instruction = 8;
                     break;
                 case "LB":
                     return_register = args[0];
+                    register_lock[0] = register.get(return_register)[0];    // saved register value
+                    register_lock[1] = 1;                                   // locked register data
+                    register.put(return_register, register_lock);           // applying lock
                     cleaned = args[1].replace('(', ',').replace(")", "");
                     value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
-                    value[1] = register.get(cleaned.split(",")[1].trim()); // offset
+                    value[1] = register.get(cleaned.split(",")[1].trim())[0]; // offset
                     instruction = 9;
                     break;
                 case "SB":
                     return_register = args[0];
+                    register_lock[0] = register.get(return_register)[0];    // saved register value
+                    register_lock[1] = 1;                                   // locked register data
+                    register.put(return_register, register_lock);           // applying lock
                     cleaned = args[1].replace('(', ',').replace(")", "");
                     value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
-                    value[1] = register.get(cleaned.split(",")[1].trim()); // offset
+                    value[1] = register.get(cleaned.split(",")[1].trim())[0]; // offset
                     instruction = 10;
                     break;
                 case "LW":
                     return_register = args[0];
+                    register_lock[0] = register.get(return_register)[0];    // saved register value
+                    register_lock[1] = 1;                                   // locked register data
+                    register.put(return_register, register_lock);           // applying lock
                     cleaned = args[1].replace('(', ',').replace(")", "");
                     value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
-                    value[1] = register.get(cleaned.split(",")[1].trim()); // offset
+                    value[1] = register.get(cleaned.split(",")[1].trim())[0]; // offset
                     instruction = 11;
                     break;
                 case "SW":
                     return_register = args[0];
+                    register_lock[0] = register.get(return_register)[0];    // saved register value
+                    register_lock[1] = 1;                                   // locked register data
+                    register.put(return_register, register_lock);           // applying lock
                     cleaned = args[1].replace('(', ',').replace(")", "");
                     value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
-                    value[1] = register.get(cleaned.split(",")[1].trim()); // offset
+                    value[1] = register.get(cleaned.split(",")[1].trim())[0]; // offset
                     instruction = 12;
                     break;
                 default: // we are declaring a loop
@@ -264,7 +315,7 @@ class CPU {
             this.done = true; // there are no more instructions to fetch, finish what is in the pipeline then end.
             // todo finish pipeline
         }catch (NullPointerException e){
-            // does not matter
+            // this is expected during a stall
         }
         return new Wrapper(return_register, value, instruction, loop);
     }
@@ -286,41 +337,50 @@ class CPU {
             case 4: // MUL
                 wrapper.setSolution(wrapper.getValue()[0] * wrapper.getValue()[1]);
                 break;
-//            case 5: // BEQ
-//                // if the condition is true, go to the branch by changing the pc value
-//                if(wrapper.getValue()[0] != wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1;
-//                break;
-//            case 6: // BNE
-//                // if the condition is true, go to the branch by changing the pc value
-//                if(wrapper.getValue()[0] == wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1;
-//                break;
-//            case 7: // BNEZ
-//                // if the condition is true, go to the branch by changing the pc value
-//                if(wrapper.getValue()[0] != 0) pc = branch.get(wrapper.getLoop()) -1;
-//                break;
-//            case 8: // JAL
-//                break;
+            // branching is handled in instruction decode
+            case 5: // BEQ
+                // if the condition is true, go to the branch by changing the pc value
+                if(wrapper.getValue()[0] != wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1;
+                break;
+            case 6: // BNE
+                // if the condition is true, go to the branch by changing the pc value
+                if(wrapper.getValue()[0] == wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1;
+                break;
+            case 7: // BNEZ
+                // if the condition is false, reset the pc value and flush IF and ID
+                if(wrapper.getValue()[0] == 0){
+                    pc = temp_pc;
+                    pipline[1].setWrapper(null); // flush ID
+                    instruction_register = null; // flush IF
+                }
+                break;
+            case 8: // JAL
+                break;
             // all loads/stores are handled in memory_access
         }
         return wrapper;
     }
 
     private void memory_access(Wrapper wrapper){
+        Integer[] solution = new Integer[2];
         switch (wrapper.getInstruction()){
             case 9:  // LB
-                register.put(wrapper.getRegister(), // write value to register
-                        Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1])));
+                solution[1] = Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1]));
+                solution[0] = 0;
+                register.put(wrapper.getRegister(),solution); // write value to register
+                        ;
                 break;
             case 10: // SB
-                memory.insert_data(String.valueOf(register.get(wrapper.getRegister())), // write value to memory
+                memory.insert_data(String.valueOf(register.get(wrapper.getRegister())[0]), // write value to memory
                         wrapper.getValue()[0], wrapper.getValue()[1]);
                 break;
             case 11: // LW
-                register.put(wrapper.getRegister(), // write value to register
-                        Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1])));
+                solution[1] = Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1]));
+                solution[0] = 0;
+                register.put(wrapper.getRegister(),solution); // write value to register
                 break;
             case 12: // SW
-                memory.insert_data(String.valueOf(register.get(wrapper.getRegister())), // write value to memory
+                memory.insert_data(String.valueOf(register.get(wrapper.getRegister())[0]), // write value to memory
                         wrapper.getValue()[0], wrapper.getValue()[1]);
                 break;
         }
@@ -328,7 +388,8 @@ class CPU {
 
     private void write_back(Wrapper wrapper){
         // write the register value if it exists
-        if (wrapper.getSolution() != null )register.put(wrapper.getRegister(), wrapper.getSolution());
+        Integer[] solution = {wrapper.getSolution(), 0}; // write the solution and unlock the register for use
+        if (wrapper.getSolution() != null )register.put(wrapper.getRegister(), solution);
     }
 
     boolean isDone(){
