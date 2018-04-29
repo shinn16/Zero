@@ -500,7 +500,7 @@ class CPU {
      */
     private DataBus stall(){
         pipline[1].setInstruction(null);
-        pipline[0].setInstruction(null);
+        pipline[0].setInstruction("Stall");
         return null;  // always returns null
     }
 
