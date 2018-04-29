@@ -8,7 +8,7 @@ import java.util.HashMap;
  * @version 4/21/18
  */
 class CPU {
-    private long CCT = 500; // clock cycle time in milliseconds
+    private long CCT = 50; // clock cycle time in milliseconds
     private PipelineStage[] pipline = {new PipelineStage(0),
             new PipelineStage(1),
             new PipelineStage(2),
@@ -102,13 +102,6 @@ class CPU {
     }
 
     void run(){
-        // execute one clock cycle
-//        instruction_fetch(memory.getInstruction(next_pc()));
-//        Wrapper wrapper = instruction_decode(this.instruction_register);
-//        wrapper = execute(wrapper);
-//        memory_access(wrapper);
-//        write_back(wrapper);
-
         // handling write back
         try{
             write_back(pipline[4].getWrapper());
@@ -148,8 +141,6 @@ class CPU {
         }
 
         instruction_fetch(memory.getInstruction(next_pc()));
-
-
 
         // todo uncomment this section
         try{
@@ -227,6 +218,7 @@ class CPU {
                     instruction = 4;
                     break;
                 case "BEQ":
+                    if (register_lock(args[0], args[1])) return null; // data hazard
                     value[0] = register.get(args[0].trim())[0];
                     value[1] = register.get(args[1].trim())[0];
                     loop = args[1].trim();
@@ -235,6 +227,7 @@ class CPU {
                     pc = branch.get(args[1]) -1; // preemptive take branch
                     break;
                 case "BNE":
+                    if (register_lock(args[0], args[1])) return null; // data hazard
                     value[0] = register.get(args[0].trim())[0];
                     value[1] = register.get(args[1].trim())[0];
                     loop = args[1].trim();
@@ -243,6 +236,7 @@ class CPU {
                     pc = branch.get(args[1]) -1; // preemptive take branch
                     break;
                 case "BNEZ":
+                    if (register_lock(args[0])) return null; // data hazard
                     value[0] = register.get(args[0].trim())[0];
                     loop = args[1].trim();
                     instruction = 7;
@@ -263,6 +257,7 @@ class CPU {
                     instruction = 9;
                     break;
                 case "SB":
+                    if (register_lock(args[0])) return null;        // data hazard
                     return_register = args[0];
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
@@ -284,7 +279,7 @@ class CPU {
                     instruction = 11;
                     break;
                 case "SW":
-                    if (register_lock(return_register)) return null;        // data hazard
+                    if (register_lock(args[0])) return null;        // data hazard
                     return_register = args[0];
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
@@ -338,7 +333,7 @@ class CPU {
             case 7: // BNEZ
                 // if the condition is false, reset the pc value and flush IF and ID
                 if(wrapper.getValue()[0] == 0){
-                    pc = temp_pc;
+                    pc = temp_pc;                // reset pc val to before preemptive branch
                     pipline[1].setWrapper(null); // flush ID
                     instruction_register = null; // flush IF
                 }
