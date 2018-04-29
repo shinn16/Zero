@@ -106,6 +106,10 @@ class CPU {
         register.put("t4", ints);
         register.put("t5", ints);
         register.put("t6", ints);
+
+        // log header
+        log.add("           IF            |            ID             |            EX             |            MEM            |              WB           |");
+        log.add("------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     /**
@@ -170,10 +174,10 @@ class CPU {
 
         // logging all stages
         for (PipelineStage stage : pipline){
-            log_data.append(stage.toString()).append("\t");  // append instruction
-            System.out.println(log_data.toString());
+            log_data.append(String.format("%-25s|", stage.getInstruction())).append("\t");  // append instruction
         }
         log.add(log_data.toString());           // log data appended to log
+        log.add("------------------------------------------------------------------------------------------------------------------------------------------");
 
         try{
             Thread.sleep(CCT); // simulated clock cycle time.
