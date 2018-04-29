@@ -56,8 +56,13 @@ class PipelineStage {
         this.inUse = false;
     }
 
-    String getStage() {
+    private String getStage() {
         return stage.getName();
+    }
+
+    @Override
+    public String toString(){
+        return getStage() + ": " + getInstruction();
     }
 }
 

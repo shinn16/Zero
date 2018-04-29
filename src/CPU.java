@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -8,18 +9,20 @@ import java.util.HashMap;
  * @version 4/21/18
  */
 class CPU {
-    private long CCT = 500; // clock cycle time in milliseconds
-    private PipelineStage[] pipline = {new PipelineStage(0),
+    private final long CCT = 500;                                   // clock cycle time in milliseconds
+    private PipelineStage[] pipline = {new PipelineStage(0),        // the pipeline
             new PipelineStage(1),
             new PipelineStage(2),
             new PipelineStage(3),
             new PipelineStage(4)};
-    private boolean done = false;
-    private int pc = 0, temp_pc = 0;
-    private String[] instruction_register;
-    private HashMap<String, Integer[]> register = new HashMap<>();
-    private HashMap<String, Integer> branch = new HashMap<>();
-    private Memory memory = new Memory();
+    private boolean done = false;                                   // terminating condition for cpu
+    private int pc = 0;                                             // stores pc val
+    private int temp_pc = 0;                                        // backup pc val if preemptive branching is wrong
+    private String[] instruction_register;                          // stores the instruction
+    private HashMap<String, Integer[]> register = new HashMap<>();  // stores register and value
+    private HashMap<String, Integer> branch = new HashMap<>();      // stores the branches and their pc value
+    private Memory memory = new Memory();                           // memory
+    private ArrayList<String[]> log = new ArrayList<>();            // used to store log data to write later
 
     /**
      * The CPU constructor essentially creates and populates the registers.
@@ -126,6 +129,7 @@ class CPU {
         }
         pipline[4].unlock(); // unlock for writing
         pipline[4].setDataBus(pipline[3].getDataBus());
+        pipline[4].setInstruction(pipline[3].getInstruction());
         pipline[4].lock();   // lock until value is used
 
         // handling memory access
@@ -136,9 +140,10 @@ class CPU {
         }
         pipline[3].unlock(); // unlock for writing
         pipline[3].setDataBus(pipline[2].getDataBus());
+        pipline[3].setInstruction(pipline[2].getInstruction());
         pipline[3].lock();   // lock until value is used
 
-       // handling execution
+       // handling execution (ALU)
         try{
            execute(pipline[2].getDataBus());
         }catch (NullPointerException e){
@@ -146,18 +151,24 @@ class CPU {
         }
         pipline[2].unlock(); // unlock for writing
         pipline[2].setDataBus(pipline[1].getDataBus());
+        pipline[2].setInstruction(pipline[1].getInstruction());
         pipline[2].lock();   // lock until value is used
 
         // handling instruction decode
         try{
             pipline[1].setDataBus(instruction_decode(instruction_register));
-            // todo handle locking here and stalling
+            pipline[1].setInstruction(pipline[0].getInstruction());
         }catch (NullPointerException e){
             // this is expected when the pipeline is being populated
         }
 
         // handling instruction fetch
         instruction_fetch(memory.getInstruction(next_pc()));
+        pipline[0].setInstruction(Arrays.toString(instruction_register));
+
+        // logging all stages
+        for (PipelineStage stage : pipline) System.out.print(stage.toString() + "\t");
+        System.out.println();
 
         try{
             Thread.sleep(CCT); // simulated clock cycle time.
@@ -188,7 +199,6 @@ class CPU {
      * @return DataBus: data wrapper to make things easier. This could by seen as a bus.
      */
     private DataBus instruction_decode(String[] instruction_register){
-        System.out.println(Arrays.toString(instruction_register)); // todo debug remove
         String return_register = "";              // will store the register to write data to
         int value[] = new int[2];                 // the value to be written to the return register
         int instruction = 0;                      // stored decoded instruction value for the alu
@@ -198,7 +208,7 @@ class CPU {
             String[] args = instruction_register[1].split(","); // gets the arguments in array format
             switch (instruction_register[0].trim()) {
                 case "ADD":
-                    if (register_lock(args[1], args[2])) return null;       // checking for data hazard
+                    if (register_lock(args[1], args[2])) return stall();    // checking for data hazard
                     return_register = args[0].trim();
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
@@ -208,7 +218,7 @@ class CPU {
                     // we don't need to assign an instruction value here as it is already zero
                     break;
                 case "ADDI":
-                    if (register_lock(args[1])) return null;       // checking for data hazard
+                    if (register_lock(args[1])) return stall();             // checking for data hazard
                     return_register = args[0].trim();
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
@@ -218,7 +228,7 @@ class CPU {
                     instruction = 1;
                     break;
                 case "SUB":
-                    if (register_lock(args[1], args[2])) return null;       // checking for data hazard
+                    if (register_lock(args[1], args[2])) return stall();    // checking for data hazard
                     return_register = args[0].trim();
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
@@ -228,7 +238,7 @@ class CPU {
                     instruction = 2;
                     break;
                 case "SUBI":
-                    if (register_lock(args[1])) return null;       // checking for data hazard
+                    if (register_lock(args[1])) return stall();             // checking for data hazard
                     return_register = args[0].trim();
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
@@ -238,7 +248,7 @@ class CPU {
                     instruction = 3;
                     break;
                 case "MUL":
-                    if (register_lock(args[1], args[2])) return null;       // checking for data hazard
+                    if (register_lock(args[1], args[2])) return stall();    // checking for data hazard
                     return_register = args[0].trim();
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
@@ -248,7 +258,7 @@ class CPU {
                     instruction = 4;
                     break;
                 case "BEQ":
-                    if (register_lock(args[0], args[1])) return null; // data hazard
+                    if (register_lock(args[0], args[1])) return stall(); // data hazard
                     value[0] = register.get(args[0].trim())[0];
                     value[1] = register.get(args[1].trim())[0];
                     instruction = 5;
@@ -256,7 +266,7 @@ class CPU {
                     pc = branch.get(args[1]) -1; // preemptive take branch
                     break;
                 case "BNE":
-                    if (register_lock(args[0], args[1])) return null; // data hazard
+                    if (register_lock(args[0], args[1])) return stall(); // data hazard
                     value[0] = register.get(args[0].trim())[0];
                     value[1] = register.get(args[1].trim())[0];
                     instruction = 6;
@@ -264,7 +274,7 @@ class CPU {
                     pc = branch.get(args[1]) -1; // preemptive take branch
                     break;
                 case "BNEZ":
-                    if (register_lock(args[0])) return null; // data hazard
+                    if (register_lock(args[0])) return stall(); // data hazard
                     value[0] = register.get(args[0].trim())[0];
                     instruction = 7;
                     temp_pc = pc;                // make a copy of the current pc
@@ -284,7 +294,7 @@ class CPU {
                     instruction = 9;
                     break;
                 case "SB":
-                    if (register_lock(args[0])) return null;        // data hazard
+                    if (register_lock(args[0])) return stall();              // data hazard
                     return_register = args[0];
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
@@ -306,7 +316,7 @@ class CPU {
                     instruction = 11;
                     break;
                 case "SW":
-                    if (register_lock(args[0])) return null;        // data hazard
+                    if (register_lock(args[0])) return stall();              // data hazard
                     return_register = args[0];
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
@@ -361,25 +371,19 @@ class CPU {
             case 5: // BEQ
                 // if the condition is false, reset the pc value and flush IF and ID
                 if(dataBus.getValue()[0] == dataBus.getValue()[1]) {
-                    pc = temp_pc;                // reset pc val to before preemptive branch
-                    pipline[1].setDataBus(null); // flush ID
-                    instruction_register = null; // flush IF
+                    flush();
                 }
                 break;
             case 6: // BNE
                 // if the condition is false, reset the pc value and flush IF and ID
                 if(dataBus.getValue()[0] != dataBus.getValue()[1]) {
-                    pc = temp_pc;                // reset pc val to before preemptive branch
-                    pipline[1].setDataBus(null); // flush ID
-                    instruction_register = null; // flush IF
+                    flush();
                 }
                 break;
             case 7: // BNEZ
                 // if the condition is false, reset the pc value and flush IF and ID
                 if(dataBus.getValue()[0] == 0){
-                    pc = temp_pc;                // reset pc val to before preemptive branch
-                    pipline[1].setDataBus(null); // flush ID
-                    instruction_register = null; // flush IF
+                    flush();
                 }
                 break;
             case 8: // JAL
@@ -465,6 +469,28 @@ class CPU {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Flushes the pipeline if the branch prediction was wrong.
+     */
+    private void flush(){
+        pc = temp_pc;                       // reset pc val to before preemptive branch
+        pipline[1].setDataBus(null);        // flush ID
+        pipline[1].setInstruction(null);    // clear out instruction for logging purpose
+        instruction_register = null;        // flush IF
+        pipline[0].setInstruction(null);    // clear out instruction for logging purpose
+    }
+
+    /**
+     * Stalls the pipeline.
+     *
+     * @return Null
+     */
+    private DataBus stall(){
+        pipline[1].setInstruction(null);
+        pipline[0].setInstruction(null);
+        return null;  // always returns null
     }
 
     /**
