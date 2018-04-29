@@ -349,8 +349,8 @@ class CPU {
         Integer[] solution = new Integer[2];
         switch (wrapper.getInstruction()){
             case 9:  // LB
-                solution[1] = Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1]));
-                solution[0] = 0;
+                solution[0] = Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1]));
+                solution[1] = 0;
                 register.put(wrapper.getRegister(),solution); // write value to register
                 break;
             case 10: // SB
@@ -358,8 +358,8 @@ class CPU {
                         wrapper.getValue()[0], wrapper.getValue()[1]);
                 break;
             case 11: // LW
-                solution[1] = Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1]));
-                solution[0] = 0;
+                solution[0] = Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1]));
+                solution[1] = 0;
                 register.put(wrapper.getRegister(),solution); // write value to register
                 break;
             case 12: // SW
