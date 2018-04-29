@@ -109,12 +109,44 @@ class CPU {
 //        write_back(wrapper);
 
         // handling write back
-        write_back(pipline[4].getWrapper());
-        pipline[4].unlock();
+        try{
+            write_back(pipline[4].getWrapper());
+        }catch (NullPointerException e){
+            // this is expected when the pipeline is being populated
+        }
+        pipline[4].unlock(); // unlock for writing
         pipline[4].setWrapper(pipline[3].getWrapper());
-        pipline[4].lock();
+        pipline[4].lock();   // lock until value is used
 
         // handling memory access
+        try{
+            memory_access(pipline[3].getWrapper());
+        }catch (NullPointerException e){
+            // this is expected when the pipeline is being populated
+        }
+        pipline[3].unlock(); // unlock for writing
+        pipline[3].setWrapper(pipline[2].getWrapper());
+        pipline[3].lock();   // lock until value is used
+
+       // handling execution
+        try{
+           execute(pipline[2].getWrapper());
+        }catch (NullPointerException e){
+            // this is expected when the pipeline is being populated
+        }
+        pipline[2].unlock(); // unlock for writing
+        pipline[2].setWrapper(pipline[1].getWrapper());
+        pipline[2].lock();   // lock until value is used
+
+        // handling instruction decode
+        try{
+            pipline[1].setWrapper(instruction_decode(instruction_register));
+            // todo handle locking here and stalling
+        }catch (NullPointerException e){
+            // this is expected when the pipeline is being populated
+        }
+
+        instruction_fetch(memory.getInstruction(next_pc()));
 
 
 
@@ -188,6 +220,8 @@ class CPU {
                     value[0] = register.get(args[0].trim());
                     loop = args[1].trim();
                     instruction = 7;
+                    // attempting to fix early stopping
+                    if(register.get(args[0].trim()) != 0) pc = branch.get(args[1]) -1;
                     break;
                 case "JAL":
                     instruction = 8;
@@ -226,9 +260,11 @@ class CPU {
                     // rerun decode without loop declaration in the instruction
                     return instruction_decode( Arrays.copyOfRange(instruction_register, 1, instruction_register.length));
             }
-        }catch (NullPointerException | IndexOutOfBoundsException e){ // this will end the program
+        }catch (IndexOutOfBoundsException e){ // this will end the program
             this.done = true; // there are no more instructions to fetch, finish what is in the pipeline then end.
             // todo finish pipeline
+        }catch (NullPointerException e){
+            // does not matter
         }
         return new Wrapper(return_register, value, instruction, loop);
     }
@@ -250,20 +286,20 @@ class CPU {
             case 4: // MUL
                 wrapper.setSolution(wrapper.getValue()[0] * wrapper.getValue()[1]);
                 break;
-            case 5: // BEQ
-                // if the condition is true, go to the branch by changing the pc value
-                if(wrapper.getValue()[0] != wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1;
-                break;
-            case 6: // BNE
-                // if the condition is true, go to the branch by changing the pc value
-                if(wrapper.getValue()[0] == wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1;
-                break;
-            case 7: // BNEZ
-                // if the condition is true, go to the branch by changing the pc value
-                if(wrapper.getValue()[0] != 0) pc = branch.get(wrapper.getLoop()) -1;
-                break;
-            case 8: // JAL
-                break;
+//            case 5: // BEQ
+//                // if the condition is true, go to the branch by changing the pc value
+//                if(wrapper.getValue()[0] != wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1;
+//                break;
+//            case 6: // BNE
+//                // if the condition is true, go to the branch by changing the pc value
+//                if(wrapper.getValue()[0] == wrapper.getValue()[1]) pc = branch.get(wrapper.getLoop()) -1;
+//                break;
+//            case 7: // BNEZ
+//                // if the condition is true, go to the branch by changing the pc value
+//                if(wrapper.getValue()[0] != 0) pc = branch.get(wrapper.getLoop()) -1;
+//                break;
+//            case 8: // JAL
+//                break;
             // all loads/stores are handled in memory_access
         }
         return wrapper;
