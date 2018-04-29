@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @version 4/21/18
  */
 class CPU {
-    private final long CCT = 0;                                   // clock cycle time in milliseconds
+    private final long CCT = 500;                                   // clock cycle time in milliseconds
     private PipelineStage[] pipline = {new PipelineStage(0),        // the pipeline
             new PipelineStage(1),
             new PipelineStage(2),
@@ -108,7 +108,7 @@ class CPU {
         register.put("t6", ints);
 
         // log header
-        log.add("           IF            |            ID             |            EX             |            MEM            |              WB           |");
+        log.add("|           IF            |           ID             |            EX             |            MEM            |             WB            |");
         log.add("------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
@@ -173,6 +173,7 @@ class CPU {
         pipline[0].setInstruction(Arrays.toString(instruction_register));
 
         // logging all stages
+        log_data.append("|"); // left table margin
         for (PipelineStage stage : pipline){
             log_data.append(String.format("%-25s|", stage.getInstruction())).append("\t");  // append instruction
         }

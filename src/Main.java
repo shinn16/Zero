@@ -27,8 +27,7 @@ public class Main {
         printWelcome();
         try{
             // load the program file to memory
-            //String fileName = scanner.nextLine();
-            String fileName = "program.txt";
+            String fileName = scanner.nextLine();
             fileReader = new Scanner(new File(fileName));
             System.out.print("Loading file...");
             while (fileReader.hasNextLine()){        // read the file to memory
