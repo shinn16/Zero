@@ -102,11 +102,21 @@ class CPU {
 
     void run(){
         // execute one clock cycle
-        instruction_fetch(memory.getInstruction(next_pc()));
-        Wrapper wrapper = instruction_decode(this.instruction_register);
-        wrapper = execute(wrapper);
-        memory_access(wrapper);
-        write_back(wrapper);
+//        instruction_fetch(memory.getInstruction(next_pc()));
+//        Wrapper wrapper = instruction_decode(this.instruction_register);
+//        wrapper = execute(wrapper);
+//        memory_access(wrapper);
+//        write_back(wrapper);
+
+        // handling write back
+        write_back(pipline[4].getWrapper());
+        pipline[4].unlock();
+        pipline[4].setWrapper(pipline[3].getWrapper());
+        pipline[4].lock();
+
+        // handling memory access
+
+
 
         // todo uncomment this section
 //        try{
