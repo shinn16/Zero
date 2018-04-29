@@ -7,16 +7,15 @@
  * Simple wrapper for register/data pairs that will make my life easier
  */
 class DataBus {
-    private String register, loop;
+    private String register;
     private int instruction;
     private Integer solution; // using the Integer class allows for null evaluation, int does not.
     private int[] value;
 
-    DataBus(String register, int[] value, int instruction, String loop){
+    DataBus(String register, int[] value, int instruction){
         this.register = register;
         this.value = value;
         this.instruction = instruction;
-        this.loop = loop;
     }
 
     String getRegister() { return register; }
@@ -29,7 +28,6 @@ class DataBus {
 
     int getInstruction(){ return instruction; }
 
-    String getLoop(){ return loop; }
 
     @Override
     public String toString(){

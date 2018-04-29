@@ -192,7 +192,6 @@ class CPU {
         String return_register = "";              // will store the register to write data to
         int value[] = new int[2];                 // the value to be written to the return register
         int instruction = 0;                      // stored decoded instruction value for the alu
-        String loop = "";                         // this stores loop to execute
         String cleaned;                           // used to clean the load/store indexing arguments
         Integer[] register_lock = new Integer[2]; // used to lock registers to prevent data hazards
         try{
@@ -252,7 +251,6 @@ class CPU {
                     if (register_lock(args[0], args[1])) return null; // data hazard
                     value[0] = register.get(args[0].trim())[0];
                     value[1] = register.get(args[1].trim())[0];
-                    loop = args[1].trim();
                     instruction = 5;
                     temp_pc = pc;                // make a copy of the current pc
                     pc = branch.get(args[1]) -1; // preemptive take branch
@@ -261,7 +259,6 @@ class CPU {
                     if (register_lock(args[0], args[1])) return null; // data hazard
                     value[0] = register.get(args[0].trim())[0];
                     value[1] = register.get(args[1].trim())[0];
-                    loop = args[1].trim();
                     instruction = 6;
                     temp_pc = pc;                // make a copy of the current pc
                     pc = branch.get(args[1]) -1; // preemptive take branch
@@ -269,7 +266,6 @@ class CPU {
                 case "BNEZ":
                     if (register_lock(args[0])) return null; // data hazard
                     value[0] = register.get(args[0].trim())[0];
-                    loop = args[1].trim();
                     instruction = 7;
                     temp_pc = pc;                // make a copy of the current pc
                     pc = branch.get(args[1]) -1; // preemptive take branch
@@ -331,7 +327,7 @@ class CPU {
         }catch (NullPointerException e){
             // this is expected during a stall
         }
-        return new DataBus(return_register, value, instruction, loop);
+        return new DataBus(return_register, value, instruction);
     }
 
     /**
