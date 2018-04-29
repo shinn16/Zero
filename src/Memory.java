@@ -59,7 +59,6 @@ class Memory {
         index = (data_index + index + offset)%256;
         if (index < instruction_index){
             index= data_index; // prevent instructions from being overwritten
-            System.out.println(Arrays.toString(memory));
         }
         memory[index]  = data;
     }

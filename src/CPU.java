@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @version 4/21/18
  */
 class CPU {
-    private final long CCT = 500;                                   // clock cycle time in milliseconds
+    private final long CCT = 0;                                   // clock cycle time in milliseconds
     private PipelineStage[] pipline = {new PipelineStage(0),        // the pipeline
             new PipelineStage(1),
             new PipelineStage(2),
@@ -21,8 +21,8 @@ class CPU {
     private String[] instruction_register;                          // stores the instruction
     private HashMap<String, Integer[]> register = new HashMap<>();  // stores register and value
     private HashMap<String, Integer> branch = new HashMap<>();      // stores the branches and their pc value
-    private Memory memory = new Memory();                           // memory
-    private ArrayList<String[]> log = new ArrayList<>();            // used to store log data to write later
+    private Memory memory;                                          // memory
+    private ArrayList<String> log = new ArrayList<>();              // used to store log data to write later
 
     /**
      * The CPU constructor essentially creates and populates the registers.
@@ -121,6 +121,8 @@ class CPU {
      * Simulates one clock cycle with the pipeline.
      */
     void run(){
+        StringBuilder log_data = new StringBuilder(); // used to create a log entry
+
         // handling write back
         try{
             write_back(pipline[4].getDataBus());
@@ -167,8 +169,11 @@ class CPU {
         pipline[0].setInstruction(Arrays.toString(instruction_register));
 
         // logging all stages
-        for (PipelineStage stage : pipline) System.out.print(stage.toString() + "\t");
-        System.out.println();
+        for (PipelineStage stage : pipline){
+            log_data.append(stage.toString());  // append instruction
+            log_data.append("\t");              // tab delimiter
+        }
+        log.add(log_data.toString());           // log data appended to log
 
         try{
             Thread.sleep(CCT); // simulated clock cycle time.
@@ -263,7 +268,7 @@ class CPU {
                     value[1] = register.get(args[1].trim())[0];
                     instruction = 5;
                     temp_pc = pc;                // make a copy of the current pc
-                    pc = branch.get(args[1]) -1; // preemptive take branch
+                    pc = branch.get(args[2]) -1; // preemptive take branch
                     break;
                 case "BNE":
                     if (register_lock(args[0], args[1])) return stall(); // data hazard
@@ -271,7 +276,7 @@ class CPU {
                     value[1] = register.get(args[1].trim())[0];
                     instruction = 6;
                     temp_pc = pc;                // make a copy of the current pc
-                    pc = branch.get(args[1]) -1; // preemptive take branch
+                    pc = branch.get(args[2]) -1; // preemptive take branch
                     break;
                 case "BNEZ":
                     if (register_lock(args[0])) return stall(); // data hazard
@@ -501,5 +506,13 @@ class CPU {
      */
     boolean isDone(){
         return done;
+    }
+
+    /**
+     * Returns the log to be written to a text file.
+     * @return ArrayList<String[]>: log
+     */
+    ArrayList<String> getLog(){
+        return log;
     }
 }
