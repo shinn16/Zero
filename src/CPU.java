@@ -152,11 +152,11 @@ class CPU {
 
 
         // todo uncomment this section
-//        try{
-//            Thread.sleep(CCT); // simulated clock cycle time.
-//        }catch (InterruptedException e){
-//            e.printStackTrace();
-//        }
+        try{
+            Thread.sleep(CCT); // simulated clock cycle time.
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -177,51 +177,37 @@ class CPU {
             String[] args = instruction_register[1].split(","); // gets the arguments in array format
             switch (instruction_register[0].trim()) {
                 case "ADD":
+                    if (register_lock(args[1], args[2])) return null;       // checking for data hazard
                     return_register = args[0].trim();
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
                     register.put(return_register, register_lock);           // applying lock
-                    if (register.get(args[1])[1] == 1 || register.get(args[2])[1] == 1 ){ // data hazard
-                        pc --;                       // decrement the pc
-                        pipline[1].setWrapper(null); // flush ID
-                        instruction_register = null; // flush IF
-                        return null;
-                    }
                     value[0] = register.get(args[1].trim())[0];
                     value[1] = register.get(args[2].trim())[0];
                     // we don't need to assign an instruction value here as it is already zero
                     break;
                 case "ADDI":
+                    if (register_lock(args[1])) return null;       // checking for data hazard
                     return_register = args[0].trim();
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
                     register.put(return_register, register_lock);           // applying lock
-                    if (register.get(args[1])[1] == 1 || register.get(args[2])[1] == 1 ){ // data hazard
-                        pc --;                       // decrement the pc
-                        pipline[1].setWrapper(null); // flush ID
-                        instruction_register = null; // flush IF
-                        return null;
-                    }
                     value[0] = register.get(args[1].trim())[0];
                     value[1] = Integer.parseInt(args[2].trim());
                     instruction = 1;
                     break;
                 case "SUB":
+                    if (register_lock(args[1], args[2])) return null;       // checking for data hazard
                     return_register = args[0].trim();
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
                     register.put(return_register, register_lock);           // applying lock
-                    if (register.get(args[1])[1] == 1 || register.get(args[2])[1] == 1 ){ // data hazard
-                        pc --;                       // decrement the pc
-                        pipline[1].setWrapper(null); // flush ID
-                        instruction_register = null; // flush IF
-                        return null;
-                    }
                     value[0] = register.get(args[1].trim())[0];
                     value[1] = register.get(args[2].trim())[0];
                     instruction = 2;
                     break;
                 case "SUBI":
+                    if (register_lock(args[1])) return null;       // checking for data hazard
                     return_register = args[0].trim();
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
@@ -231,6 +217,7 @@ class CPU {
                     instruction = 3;
                     break;
                 case "MUL":
+                    if (register_lock(args[1], args[2])) return null;       // checking for data hazard
                     return_register = args[0].trim();
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
@@ -280,6 +267,7 @@ class CPU {
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
                     register.put(return_register, register_lock);           // applying lock
+                    if (register_lock(args[1], args[2])) return null;       // checking for locked registers
                     cleaned = args[1].replace('(', ',').replace(")", "");
                     value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
                     value[1] = register.get(cleaned.split(",")[1].trim())[0]; // offset
@@ -296,6 +284,7 @@ class CPU {
                     instruction = 11;
                     break;
                 case "SW":
+                    if (register_lock(return_register)) return null;        // data hazard
                     return_register = args[0];
                     register_lock[0] = register.get(return_register)[0];    // saved register value
                     register_lock[1] = 1;                                   // locked register data
@@ -368,7 +357,6 @@ class CPU {
                 solution[1] = Integer.parseInt(memory.getdata(wrapper.getValue()[0], wrapper.getValue()[1]));
                 solution[0] = 0;
                 register.put(wrapper.getRegister(),solution); // write value to register
-                        ;
                 break;
             case 10: // SB
                 memory.insert_data(String.valueOf(register.get(wrapper.getRegister())[0]), // write value to memory
@@ -390,6 +378,26 @@ class CPU {
         // write the register value if it exists
         Integer[] solution = {wrapper.getSolution(), 0}; // write the solution and unlock the register for use
         if (wrapper.getSolution() != null )register.put(wrapper.getRegister(), solution);
+    }
+
+    private boolean register_lock(String register){
+        if (this.register.get(register)[1] == 1){ // data hazard
+            pc --;
+            pipline[1].setWrapper(null); // flush ID
+            instruction_register = null; // flush IF
+            return true;
+        }
+        return false;
+    }
+
+    private boolean register_lock(String register1, String register2){
+        if (register.get(register1)[1] == 1 || register.get(register2)[1] == 1 ){ // data hazard
+            pc --;                       // decrement the pc
+            pipline[1].setWrapper(null); // flush ID
+            instruction_register = null; // flush IF
+            return true;
+        }
+        return false;
     }
 
     boolean isDone(){
