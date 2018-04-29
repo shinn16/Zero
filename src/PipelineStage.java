@@ -19,12 +19,16 @@ class PipelineStage {
                 break;
             case 1:
                 this.stage = Stage.ID;
+                break;
             case 2:
                 this.stage = Stage.EX;
+                break;
             case 3:
                 this.stage = Stage.MEM;
+                break;
             case 4:
                 this.stage = Stage.WB;
+                break;
         }
     }
 

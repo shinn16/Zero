@@ -170,8 +170,8 @@ class CPU {
 
         // logging all stages
         for (PipelineStage stage : pipline){
-            log_data.append(stage.toString());  // append instruction
-            log_data.append("\t");              // tab delimiter
+            log_data.append(stage.toString()).append("\t");  // append instruction
+            System.out.println(log_data.toString());
         }
         log.add(log_data.toString());           // log data appended to log
 
@@ -296,6 +296,7 @@ class CPU {
                     cleaned = args[1].replace('(', ',').replace(")", "");
                     value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
                     value[1] = register.get(cleaned.split(",")[1].trim())[0]; // offset
+                    if (register_lock(cleaned.split(",")[1].trim())) return stall();
                     instruction = 9;
                     break;
                 case "SB":
@@ -318,6 +319,7 @@ class CPU {
                     cleaned = args[1].replace('(', ',').replace(")", "");
                     value[0] = Integer.parseInt(cleaned.split(",")[0].trim()); // index
                     value[1] = register.get(cleaned.split(",")[1].trim())[0]; // offset
+                    if (register_lock(cleaned.split(",")[1].trim())) return stall();
                     instruction = 11;
                     break;
                 case "SW":
