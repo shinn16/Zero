@@ -1,0 +1,116 @@
+\hypertarget{class_memory}{}\section{Memory Class Reference}
+\label{class_memory}\index{Memory@{Memory}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+String \mbox{\hyperlink{class_memory_a45c16fbed000105573cba5d6b1f4e727}{to\+String}} ()
+\end{DoxyCompactItemize}
+\subsection*{Package Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_memory_a18ff0d806d11ea959fbb5e6357a1f63e}{Memory}} ()
+\item 
+void \mbox{\hyperlink{class_memory_a979bee79db15f41dc1300916ef561118}{insert\+\_\+instruction}} (String data)
+\item 
+String \mbox{\hyperlink{class_memory_a73c54ab9efefebf18ff0d8722dbe80e3}{get\+Instruction}} (int index)
+\item 
+void \mbox{\hyperlink{class_memory_a51acd7ce510413dc6834e9c5d383ae73}{set\+Data\+\_\+memory\+\_\+start}} ()
+\item 
+void \mbox{\hyperlink{class_memory_a29f109643d88d66008afc916eae6cea6}{insert\+\_\+data}} (String data, int index, int offset)
+\item 
+String \mbox{\hyperlink{class_memory_ac543412608c09b39b93b1e30a3b831a2}{getdata}} (int index, int offset)
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+String \mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_memory_a3a84ec7ffdcb044c979085e5cc2498cb}{memory}} = new String\mbox{[}256\mbox{]}
+\item 
+int \mbox{\hyperlink{class_memory_a1a44efd4867dad33ce936039c19ad4aa}{instruction\+\_\+index}} = 0
+\item 
+int \mbox{\hyperlink{class_memory_a12ea5f04133e82e0eef1358bc6181747}{data\+\_\+index}} = 0
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\mbox{\hyperlink{class_memory}{Memory}} Class
+
+\begin{DoxyAuthor}{Author}
+Patrick Shinn 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+4/25/18 
+\end{DoxyVersion}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_memory_a18ff0d806d11ea959fbb5e6357a1f63e}\label{class_memory_a18ff0d806d11ea959fbb5e6357a1f63e}} 
+\index{Memory@{Memory}!Memory@{Memory}}
+\index{Memory@{Memory}!Memory@{Memory}}
+\subsubsection{\texorpdfstring{Memory()}{Memory()}}
+{\footnotesize\ttfamily Memory.\+Memory (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_memory_ac543412608c09b39b93b1e30a3b831a2}\label{class_memory_ac543412608c09b39b93b1e30a3b831a2}} 
+\index{Memory@{Memory}!getdata@{getdata}}
+\index{getdata@{getdata}!Memory@{Memory}}
+\subsubsection{\texorpdfstring{getdata()}{getdata()}}
+{\footnotesize\ttfamily String Memory.\+getdata (\begin{DoxyParamCaption}\item[{int}]{index,  }\item[{int}]{offset }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+\mbox{\Hypertarget{class_memory_a73c54ab9efefebf18ff0d8722dbe80e3}\label{class_memory_a73c54ab9efefebf18ff0d8722dbe80e3}} 
+\index{Memory@{Memory}!get\+Instruction@{get\+Instruction}}
+\index{get\+Instruction@{get\+Instruction}!Memory@{Memory}}
+\subsubsection{\texorpdfstring{get\+Instruction()}{getInstruction()}}
+{\footnotesize\ttfamily String Memory.\+get\+Instruction (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+\mbox{\Hypertarget{class_memory_a29f109643d88d66008afc916eae6cea6}\label{class_memory_a29f109643d88d66008afc916eae6cea6}} 
+\index{Memory@{Memory}!insert\+\_\+data@{insert\+\_\+data}}
+\index{insert\+\_\+data@{insert\+\_\+data}!Memory@{Memory}}
+\subsubsection{\texorpdfstring{insert\+\_\+data()}{insert\_data()}}
+{\footnotesize\ttfamily void Memory.\+insert\+\_\+data (\begin{DoxyParamCaption}\item[{String}]{data,  }\item[{int}]{index,  }\item[{int}]{offset }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+\mbox{\Hypertarget{class_memory_a979bee79db15f41dc1300916ef561118}\label{class_memory_a979bee79db15f41dc1300916ef561118}} 
+\index{Memory@{Memory}!insert\+\_\+instruction@{insert\+\_\+instruction}}
+\index{insert\+\_\+instruction@{insert\+\_\+instruction}!Memory@{Memory}}
+\subsubsection{\texorpdfstring{insert\+\_\+instruction()}{insert\_instruction()}}
+{\footnotesize\ttfamily void Memory.\+insert\+\_\+instruction (\begin{DoxyParamCaption}\item[{String}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+\mbox{\Hypertarget{class_memory_a51acd7ce510413dc6834e9c5d383ae73}\label{class_memory_a51acd7ce510413dc6834e9c5d383ae73}} 
+\index{Memory@{Memory}!set\+Data\+\_\+memory\+\_\+start@{set\+Data\+\_\+memory\+\_\+start}}
+\index{set\+Data\+\_\+memory\+\_\+start@{set\+Data\+\_\+memory\+\_\+start}!Memory@{Memory}}
+\subsubsection{\texorpdfstring{set\+Data\+\_\+memory\+\_\+start()}{setData\_memory\_start()}}
+{\footnotesize\ttfamily void Memory.\+set\+Data\+\_\+memory\+\_\+start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+\mbox{\Hypertarget{class_memory_a45c16fbed000105573cba5d6b1f4e727}\label{class_memory_a45c16fbed000105573cba5d6b1f4e727}} 
+\index{Memory@{Memory}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Memory@{Memory}}
+\subsubsection{\texorpdfstring{to\+String()}{toString()}}
+{\footnotesize\ttfamily String Memory.\+to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_memory_a12ea5f04133e82e0eef1358bc6181747}\label{class_memory_a12ea5f04133e82e0eef1358bc6181747}} 
+\index{Memory@{Memory}!data\+\_\+index@{data\+\_\+index}}
+\index{data\+\_\+index@{data\+\_\+index}!Memory@{Memory}}
+\subsubsection{\texorpdfstring{data\+\_\+index}{data\_index}}
+{\footnotesize\ttfamily int Memory.\+data\+\_\+index = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_memory_a1a44efd4867dad33ce936039c19ad4aa}\label{class_memory_a1a44efd4867dad33ce936039c19ad4aa}} 
+\index{Memory@{Memory}!instruction\+\_\+index@{instruction\+\_\+index}}
+\index{instruction\+\_\+index@{instruction\+\_\+index}!Memory@{Memory}}
+\subsubsection{\texorpdfstring{instruction\+\_\+index}{instruction\_index}}
+{\footnotesize\ttfamily int Memory.\+instruction\+\_\+index = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_memory_a3a84ec7ffdcb044c979085e5cc2498cb}\label{class_memory_a3a84ec7ffdcb044c979085e5cc2498cb}} 
+\index{Memory@{Memory}!memory@{memory}}
+\index{memory@{memory}!Memory@{Memory}}
+\subsubsection{\texorpdfstring{memory}{memory}}
+{\footnotesize\ttfamily String \mbox{[}$\,$\mbox{]} Memory.\+memory = new String\mbox{[}256\mbox{]}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{_memory_8java}{Memory.\+java}}\end{DoxyCompactItemize}

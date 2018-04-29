@@ -1,0 +1,140 @@
+\hypertarget{class_pipeline_stage}{}\section{Pipeline\+Stage Class Reference}
+\label{class_pipeline_stage}\index{Pipeline\+Stage@{Pipeline\+Stage}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+String \mbox{\hyperlink{class_pipeline_stage_afe1a4701506f8257e53caff512af905d}{to\+String}} ()
+\end{DoxyCompactItemize}
+\subsection*{Package Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_pipeline_stage_af608b65a2a3bb7d9fcf3d860152104a2}{Pipeline\+Stage}} (int \mbox{\hyperlink{class_pipeline_stage_a8e9a5f7315a4d88213c4ad0949048f34}{stage}})
+\item 
+String \mbox{\hyperlink{class_pipeline_stage_a0716fd5bf42bb11790bf8ab6568dc22d}{get\+Instruction}} ()
+\item 
+void \mbox{\hyperlink{class_pipeline_stage_adc91fb5b9c859a597c6a889c822edb18}{set\+Data\+Bus}} (\mbox{\hyperlink{class_data_bus}{Data\+Bus}} \mbox{\hyperlink{class_pipeline_stage_abf7e2ce98acaa474f4be90e14fda0f26}{data\+Bus}})
+\item 
+\mbox{\hyperlink{class_data_bus}{Data\+Bus}} \mbox{\hyperlink{class_pipeline_stage_a132fd57aa34d80eb12ac7b228d29d32e}{get\+Data\+Bus}} ()
+\item 
+void \mbox{\hyperlink{class_pipeline_stage_a5bf1a125f39f8fbcce67d892b67c80af}{set\+Instruction}} (String \mbox{\hyperlink{class_pipeline_stage_a489ee0d4b3d0eee31ec60b9cb24a0e36}{instruction}})
+\item 
+boolean \mbox{\hyperlink{class_pipeline_stage_ae04dfe9641854b90cd470b1267425f0c}{is\+In\+Use}} ()
+\item 
+void \mbox{\hyperlink{class_pipeline_stage_a12c4e47d7abbf17c0042d4b41464fae0}{lock}} ()
+\item 
+void \mbox{\hyperlink{class_pipeline_stage_ade83daea8199744f2f6466f5cbd87330}{unlock}} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+String \mbox{\hyperlink{class_pipeline_stage_a935e03d46a543f261995097c044fd655}{get\+Stage}} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+boolean \mbox{\hyperlink{class_pipeline_stage_a3ac73b767158fba9e6875514845d1d97}{in\+Use}} = false
+\item 
+String \mbox{\hyperlink{class_pipeline_stage_a489ee0d4b3d0eee31ec60b9cb24a0e36}{instruction}}
+\item 
+\mbox{\hyperlink{enum_stage}{Stage}} \mbox{\hyperlink{class_pipeline_stage_a8e9a5f7315a4d88213c4ad0949048f34}{stage}}
+\item 
+\mbox{\hyperlink{class_data_bus}{Data\+Bus}} \mbox{\hyperlink{class_pipeline_stage_abf7e2ce98acaa474f4be90e14fda0f26}{data\+Bus}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_pipeline_stage_af608b65a2a3bb7d9fcf3d860152104a2}\label{class_pipeline_stage_af608b65a2a3bb7d9fcf3d860152104a2}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!Pipeline\+Stage@{Pipeline\+Stage}}
+\index{Pipeline\+Stage@{Pipeline\+Stage}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{Pipeline\+Stage()}{PipelineStage()}}
+{\footnotesize\ttfamily Pipeline\+Stage.\+Pipeline\+Stage (\begin{DoxyParamCaption}\item[{int}]{stage }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_pipeline_stage_a132fd57aa34d80eb12ac7b228d29d32e}\label{class_pipeline_stage_a132fd57aa34d80eb12ac7b228d29d32e}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!get\+Data\+Bus@{get\+Data\+Bus}}
+\index{get\+Data\+Bus@{get\+Data\+Bus}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{get\+Data\+Bus()}{getDataBus()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_data_bus}{Data\+Bus}} Pipeline\+Stage.\+get\+Data\+Bus (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+\mbox{\Hypertarget{class_pipeline_stage_a0716fd5bf42bb11790bf8ab6568dc22d}\label{class_pipeline_stage_a0716fd5bf42bb11790bf8ab6568dc22d}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!get\+Instruction@{get\+Instruction}}
+\index{get\+Instruction@{get\+Instruction}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{get\+Instruction()}{getInstruction()}}
+{\footnotesize\ttfamily String Pipeline\+Stage.\+get\+Instruction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+\mbox{\Hypertarget{class_pipeline_stage_a935e03d46a543f261995097c044fd655}\label{class_pipeline_stage_a935e03d46a543f261995097c044fd655}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!get\+Stage@{get\+Stage}}
+\index{get\+Stage@{get\+Stage}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{get\+Stage()}{getStage()}}
+{\footnotesize\ttfamily String Pipeline\+Stage.\+get\+Stage (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_pipeline_stage_ae04dfe9641854b90cd470b1267425f0c}\label{class_pipeline_stage_ae04dfe9641854b90cd470b1267425f0c}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!is\+In\+Use@{is\+In\+Use}}
+\index{is\+In\+Use@{is\+In\+Use}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{is\+In\+Use()}{isInUse()}}
+{\footnotesize\ttfamily boolean Pipeline\+Stage.\+is\+In\+Use (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+\mbox{\Hypertarget{class_pipeline_stage_a12c4e47d7abbf17c0042d4b41464fae0}\label{class_pipeline_stage_a12c4e47d7abbf17c0042d4b41464fae0}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!lock@{lock}}
+\index{lock@{lock}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{lock()}{lock()}}
+{\footnotesize\ttfamily void Pipeline\+Stage.\+lock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+\mbox{\Hypertarget{class_pipeline_stage_adc91fb5b9c859a597c6a889c822edb18}\label{class_pipeline_stage_adc91fb5b9c859a597c6a889c822edb18}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!set\+Data\+Bus@{set\+Data\+Bus}}
+\index{set\+Data\+Bus@{set\+Data\+Bus}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{set\+Data\+Bus()}{setDataBus()}}
+{\footnotesize\ttfamily void Pipeline\+Stage.\+set\+Data\+Bus (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_data_bus}{Data\+Bus}}}]{data\+Bus }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+\mbox{\Hypertarget{class_pipeline_stage_a5bf1a125f39f8fbcce67d892b67c80af}\label{class_pipeline_stage_a5bf1a125f39f8fbcce67d892b67c80af}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!set\+Instruction@{set\+Instruction}}
+\index{set\+Instruction@{set\+Instruction}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{set\+Instruction()}{setInstruction()}}
+{\footnotesize\ttfamily void Pipeline\+Stage.\+set\+Instruction (\begin{DoxyParamCaption}\item[{String}]{instruction }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+\mbox{\Hypertarget{class_pipeline_stage_afe1a4701506f8257e53caff512af905d}\label{class_pipeline_stage_afe1a4701506f8257e53caff512af905d}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{to\+String()}{toString()}}
+{\footnotesize\ttfamily String Pipeline\+Stage.\+to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_pipeline_stage_ade83daea8199744f2f6466f5cbd87330}\label{class_pipeline_stage_ade83daea8199744f2f6466f5cbd87330}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!unlock@{unlock}}
+\index{unlock@{unlock}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{unlock()}{unlock()}}
+{\footnotesize\ttfamily void Pipeline\+Stage.\+unlock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_pipeline_stage_abf7e2ce98acaa474f4be90e14fda0f26}\label{class_pipeline_stage_abf7e2ce98acaa474f4be90e14fda0f26}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!data\+Bus@{data\+Bus}}
+\index{data\+Bus@{data\+Bus}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{data\+Bus}{dataBus}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_data_bus}{Data\+Bus}} Pipeline\+Stage.\+data\+Bus\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_pipeline_stage_a489ee0d4b3d0eee31ec60b9cb24a0e36}\label{class_pipeline_stage_a489ee0d4b3d0eee31ec60b9cb24a0e36}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!instruction@{instruction}}
+\index{instruction@{instruction}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{instruction}{instruction}}
+{\footnotesize\ttfamily String Pipeline\+Stage.\+instruction\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_pipeline_stage_a3ac73b767158fba9e6875514845d1d97}\label{class_pipeline_stage_a3ac73b767158fba9e6875514845d1d97}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!in\+Use@{in\+Use}}
+\index{in\+Use@{in\+Use}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{in\+Use}{inUse}}
+{\footnotesize\ttfamily boolean Pipeline\+Stage.\+in\+Use = false\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_pipeline_stage_a8e9a5f7315a4d88213c4ad0949048f34}\label{class_pipeline_stage_a8e9a5f7315a4d88213c4ad0949048f34}} 
+\index{Pipeline\+Stage@{Pipeline\+Stage}!stage@{stage}}
+\index{stage@{stage}!Pipeline\+Stage@{Pipeline\+Stage}}
+\subsubsection{\texorpdfstring{stage}{stage}}
+{\footnotesize\ttfamily \mbox{\hyperlink{enum_stage}{Stage}} Pipeline\+Stage.\+stage\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{_pipeline_stage_8java}{Pipeline\+Stage.\+java}}\end{DoxyCompactItemize}
