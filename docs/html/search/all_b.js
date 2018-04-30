@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['register',['register',['../class_c_p_u.html#ad0e0d3c3fba51527836b44298c726438',1,'CPU.register()'],['../class_data_bus.html#afd480f15b307b1c64e3511d363a4de29',1,'DataBus.register()']]],
-  ['register_5flock',['register_lock',['../class_c_p_u.html#ae2b2850e5cec1defd6072a965d9435b3',1,'CPU.register_lock(String register)'],['../class_c_p_u.html#a80a32deceb58fe8d9d146c5486ce7f0b',1,'CPU.register_lock(String register1, String register2)']]],
-  ['run',['run',['../class_c_p_u.html#ad9caa09946940961ed789371a41ad683',1,'CPU']]]
+  ['pc',['pc',['../class_c_p_u.html#ae44745460dee6c02a03992ce4b21737f',1,'CPU']]],
+  ['pipelinestage',['PipelineStage',['../class_pipeline_stage.html',1,'PipelineStage'],['../class_pipeline_stage.html#af608b65a2a3bb7d9fcf3d860152104a2',1,'PipelineStage.PipelineStage()']]],
+  ['pipelinestage_2ejava',['PipelineStage.java',['../_pipeline_stage_8java.html',1,'']]],
+  ['pipline',['pipline',['../class_c_p_u.html#acf600c50fec0b0ecacf8797c1995c612',1,'CPU']]],
+  ['printwelcome',['printWelcome',['../class_main.html#adbd81691fbbab226d1411b7cf0b11441',1,'Main']]]
 ];
