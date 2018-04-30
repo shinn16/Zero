@@ -18,14 +18,34 @@ class DataBus {
         this.instruction = instruction;
     }
 
+    /**
+     * Gets the string value for the register
+     * @return String: register
+     */
     String getRegister() { return register; }
 
+    /**
+     * Sets the solution to the instruction, AKA the output of the ALU.
+     * @param solution Integer
+     */
     void setSolution(Integer solution){ this.solution = solution; }
 
+    /**
+     * Gets the solution
+     * @return int: solution
+     */
     Integer getSolution(){ return solution; }
 
+    /**
+     * Gets the value array, AKA the register arguments
+     * @return int[]: values
+     */
     int[] getValue() { return value; }
 
+    /**
+     * Gets the stored instruction
+     * @return String: instruction
+     */
     int getInstruction(){ return instruction; }
 
 

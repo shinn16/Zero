@@ -10,6 +10,5 @@ var searchData=
   ['instruction_5findex',['instruction_index',['../class_memory.html#a1a44efd4867dad33ce936039c19ad4aa',1,'Memory']]],
   ['instruction_5fregister',['instruction_register',['../class_c_p_u.html#ab98b435ffcf92f6c7c33992af4ebe43a',1,'CPU']]],
   ['inuse',['inUse',['../class_pipeline_stage.html#a3ac73b767158fba9e6875514845d1d97',1,'PipelineStage']]],
-  ['isdone',['isDone',['../class_c_p_u.html#aef889eba6973e62664310a5ef8f9654d',1,'CPU']]],
-  ['isinuse',['isInUse',['../class_pipeline_stage.html#ae04dfe9641854b90cd470b1267425f0c',1,'PipelineStage']]]
+  ['isdone',['isDone',['../class_c_p_u.html#aef889eba6973e62664310a5ef8f9654d',1,'CPU']]]
 ];

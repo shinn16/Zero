@@ -18,7 +18,7 @@ class Memory {
         }
     }
 
-    /***
+    /**
      * Used to add program instructions to memory.
      * Keeps program data and instructions separated.
      *
@@ -30,7 +30,7 @@ class Memory {
         instruction_index ++;
     }
 
-    /***
+    /**
      * Gets instruction from memory.
      *
      * @param index int: index
@@ -40,7 +40,7 @@ class Memory {
         return memory[index];
     }
 
-    /***
+    /**
      * Used to separate program instructions and program
      * data.
      */
@@ -48,7 +48,7 @@ class Memory {
         this.data_index = instruction_index; // this sets the boundary for application data
     }
 
-    /***
+    /**
      * Inserts program data.
      *
      * @param data String
@@ -63,7 +63,7 @@ class Memory {
         memory[index]  = data;
     }
 
-    /***
+    /**
      * Gets program data from memory.
      *
      * @param index int
@@ -76,7 +76,7 @@ class Memory {
         return memory[index];
     }
 
-    /***
+    /**
      * Used for debugging.
      *
      * @return String: memory array

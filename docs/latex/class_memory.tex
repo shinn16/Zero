@@ -58,36 +58,81 @@ Patrick Shinn
 \subsubsection{\texorpdfstring{getdata()}{getdata()}}
 {\footnotesize\ttfamily String Memory.\+getdata (\begin{DoxyParamCaption}\item[{int}]{index,  }\item[{int}]{offset }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Gets program data from memory.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & int \\
+\hline
+{\em offset} & int \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+String\+: data 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_memory_a73c54ab9efefebf18ff0d8722dbe80e3}\label{class_memory_a73c54ab9efefebf18ff0d8722dbe80e3}} 
 \index{Memory@{Memory}!get\+Instruction@{get\+Instruction}}
 \index{get\+Instruction@{get\+Instruction}!Memory@{Memory}}
 \subsubsection{\texorpdfstring{get\+Instruction()}{getInstruction()}}
 {\footnotesize\ttfamily String Memory.\+get\+Instruction (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Gets instruction from memory.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & int\+: index \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+String\+: instruction 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_memory_a29f109643d88d66008afc916eae6cea6}\label{class_memory_a29f109643d88d66008afc916eae6cea6}} 
 \index{Memory@{Memory}!insert\+\_\+data@{insert\+\_\+data}}
 \index{insert\+\_\+data@{insert\+\_\+data}!Memory@{Memory}}
 \subsubsection{\texorpdfstring{insert\+\_\+data()}{insert\_data()}}
 {\footnotesize\ttfamily void Memory.\+insert\+\_\+data (\begin{DoxyParamCaption}\item[{String}]{data,  }\item[{int}]{index,  }\item[{int}]{offset }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Inserts program data.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & String \\
+\hline
+{\em index} & int \\
+\hline
+{\em offset} & int \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_memory_a979bee79db15f41dc1300916ef561118}\label{class_memory_a979bee79db15f41dc1300916ef561118}} 
 \index{Memory@{Memory}!insert\+\_\+instruction@{insert\+\_\+instruction}}
 \index{insert\+\_\+instruction@{insert\+\_\+instruction}!Memory@{Memory}}
 \subsubsection{\texorpdfstring{insert\+\_\+instruction()}{insert\_instruction()}}
 {\footnotesize\ttfamily void Memory.\+insert\+\_\+instruction (\begin{DoxyParamCaption}\item[{String}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Used to add program instructions to memory. Keeps program data and instructions separated.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & String \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_memory_a51acd7ce510413dc6834e9c5d383ae73}\label{class_memory_a51acd7ce510413dc6834e9c5d383ae73}} 
 \index{Memory@{Memory}!set\+Data\+\_\+memory\+\_\+start@{set\+Data\+\_\+memory\+\_\+start}}
 \index{set\+Data\+\_\+memory\+\_\+start@{set\+Data\+\_\+memory\+\_\+start}!Memory@{Memory}}
 \subsubsection{\texorpdfstring{set\+Data\+\_\+memory\+\_\+start()}{setData\_memory\_start()}}
 {\footnotesize\ttfamily void Memory.\+set\+Data\+\_\+memory\+\_\+start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
-\mbox{\Hypertarget{class_memory_a45c16fbed000105573cba5d6b1f4e727}\label{class_memory_a45c16fbed000105573cba5d6b1f4e727}} 
+Used to separate program instructions and program data. \mbox{\Hypertarget{class_memory_a45c16fbed000105573cba5d6b1f4e727}\label{class_memory_a45c16fbed000105573cba5d6b1f4e727}} 
 \index{Memory@{Memory}!to\+String@{to\+String}}
 \index{to\+String@{to\+String}!Memory@{Memory}}
 \subsubsection{\texorpdfstring{to\+String()}{toString()}}
 {\footnotesize\ttfamily String Memory.\+to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
+Used for debugging.
+
+\begin{DoxyReturn}{Returns}
+String\+: memory array 
+\end{DoxyReturn}
 
 
 \subsection{Member Data Documentation}

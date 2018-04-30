@@ -1,4 +1,4 @@
-/***
+/**
  * PipelineStage
  *
  * @author Patrick Shinn
@@ -32,34 +32,58 @@ class PipelineStage {
         }
     }
 
+    /**
+     * Gets the instruction held in the pipeline stage.
+     *
+     * @return String: instruction
+     */
     String getInstruction() {
         return instruction;
     }
 
+    /**
+     * Sets the dataBus object.
+     * @param dataBus: DataBus
+     */
     void setDataBus(DataBus dataBus){
         this.dataBus = dataBus;
     }
 
+    /**
+     * Gets the dataBus for the pipeline stage.
+     * @return DataBus
+     */
     DataBus getDataBus(){
         return dataBus;
     }
 
+    /**
+     * Sets the instruction in the pipeline. This does not have anything to
+     * do with execution, this is purely for logging purposes.
+     * @param instruction String
+     */
     void setInstruction(String instruction) {
         this.instruction = instruction;
     }
 
-    boolean isInUse() {
-        return inUse;
-    }
-
+    /**
+     * Locks the pipe instruction
+     */
     void lock(){
         this.inUse = true;
     }
 
+    /**
+     * Unlocks the pipe for instruction write
+     */
     void unlock(){
         this.inUse = false;
     }
 
+    /**
+     * Gets the stage name
+     * @return String: stage name
+     */
     private String getStage() {
         return stage.getName();
     }
@@ -71,7 +95,7 @@ class PipelineStage {
 }
 
 
-/***
+/**
  * Stage
  *
  * enumerated stage names for convenience.

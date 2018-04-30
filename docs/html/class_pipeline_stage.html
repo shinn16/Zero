@@ -91,8 +91,6 @@ Package Functions</h2></td></tr>
 <tr class="separator:a132fd57aa34d80eb12ac7b228d29d32e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bf1a125f39f8fbcce67d892b67c80af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipeline_stage.html#a5bf1a125f39f8fbcce67d892b67c80af">setInstruction</a> (String <a class="el" href="class_pipeline_stage.html#a489ee0d4b3d0eee31ec60b9cb24a0e36">instruction</a>)</td></tr>
 <tr class="separator:a5bf1a125f39f8fbcce67d892b67c80af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae04dfe9641854b90cd470b1267425f0c"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipeline_stage.html#ae04dfe9641854b90cd470b1267425f0c">isInUse</a> ()</td></tr>
-<tr class="separator:ae04dfe9641854b90cd470b1267425f0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12c4e47d7abbf17c0042d4b41464fae0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipeline_stage.html#a12c4e47d7abbf17c0042d4b41464fae0">lock</a> ()</td></tr>
 <tr class="separator:a12c4e47d7abbf17c0042d4b41464fae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade83daea8199744f2f6466f5cbd87330"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipeline_stage.html#ade83daea8199744f2f6466f5cbd87330">unlock</a> ()</td></tr>
@@ -114,7 +112,12 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:abf7e2ce98acaa474f4be90e14fda0f26"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_data_bus.html">DataBus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipeline_stage.html#abf7e2ce98acaa474f4be90e14fda0f26">dataBus</a></td></tr>
 <tr class="separator:abf7e2ce98acaa474f4be90e14fda0f26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="class_pipeline_stage.html">PipelineStage</a></p>
+<dl class="section author"><dt>Author</dt><dd>Patrick Shinn </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>4/28/18</dd></dl>
+<p>Represents the RISC V pipeline stages </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af608b65a2a3bb7d9fcf3d860152104a2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af608b65a2a3bb7d9fcf3d860152104a2">&#9670;&nbsp;</a></span>PipelineStage()</h2>
 
@@ -164,6 +167,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Gets the dataBus for the pipeline stage. </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_data_bus.html">DataBus</a> </dd></dl>
 
 </div>
 </div>
@@ -189,6 +193,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Gets the instruction held in the pipeline stage.</p>
+<dl class="section return"><dt>Returns</dt><dd>String: instruction </dd></dl>
 
 </div>
 </div>
@@ -214,31 +220,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae04dfe9641854b90cd470b1267425f0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae04dfe9641854b90cd470b1267425f0c">&#9670;&nbsp;</a></span>isInUse()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">boolean PipelineStage.isInUse </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">package</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>Gets the stage name </p><dl class="section return"><dt>Returns</dt><dd>String: stage name </dd></dl>
 
 </div>
 </div>
@@ -264,6 +246,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Locks the pipe instruction </p>
 
 </div>
 </div>
@@ -290,6 +273,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Sets the dataBus object. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dataBus</td><td><a class="el" href="class_data_bus.html">DataBus</a> </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -316,6 +305,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Sets the instruction in the pipeline. This does not have anything to do with execution, this is purely for logging purposes. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">instruction</td><td>String </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -358,6 +353,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Unlocks the pipe for instruction write </p>
 
 </div>
 </div>

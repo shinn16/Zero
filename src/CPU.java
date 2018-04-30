@@ -121,7 +121,7 @@ class CPU {
         return pc++; // return pc val then increment to the next one
     }
 
-    /***
+    /**
      * Simulates one clock cycle with the pipeline.
      */
     void run(){
@@ -188,7 +188,7 @@ class CPU {
 
     }
 
-    /***
+    /**
      * Instruction fetch gets an instruction string out of the memory,
      * splits it into a string array, then writes it to the instruction register.
      *
@@ -198,7 +198,7 @@ class CPU {
         instruction_register = instruction.split("\t");
     }
 
-    /***
+    /**
      * Instruction decode is responsible for parsing the assembly code,
      * fetching all needed data for code execution, and checking for data hazards
      * that could occur from accessing the data. This method also puts a lock on registers
@@ -406,7 +406,7 @@ class CPU {
         return dataBus;
     }
 
-    /***
+    /**
      * Memory access handles all stores and loads.
      * Once finished, any locked return registers will
      * be unlocked allowing any stalled stages that depend
@@ -438,7 +438,7 @@ class CPU {
         }
     }
 
-    /***
+    /**
      * Write back handles all register value updates. This also unlocks the
      * locked return register allowing a dependent stage to advance.
      *

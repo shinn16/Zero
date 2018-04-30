@@ -60,30 +60,47 @@ Simple wrapper for register/data pairs that will make my life easier
 \subsubsection{\texorpdfstring{get\+Instruction()}{getInstruction()}}
 {\footnotesize\ttfamily int Data\+Bus.\+get\+Instruction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Gets the stored instruction \begin{DoxyReturn}{Returns}
+String\+: instruction 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_data_bus_a999aeccf1731eb4f93af2ce38bce9f03}\label{class_data_bus_a999aeccf1731eb4f93af2ce38bce9f03}} 
 \index{Data\+Bus@{Data\+Bus}!get\+Register@{get\+Register}}
 \index{get\+Register@{get\+Register}!Data\+Bus@{Data\+Bus}}
 \subsubsection{\texorpdfstring{get\+Register()}{getRegister()}}
 {\footnotesize\ttfamily String Data\+Bus.\+get\+Register (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Gets the string value for the register \begin{DoxyReturn}{Returns}
+String\+: register 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_data_bus_a5b660e1518f1460aad5a1219a668c400}\label{class_data_bus_a5b660e1518f1460aad5a1219a668c400}} 
 \index{Data\+Bus@{Data\+Bus}!get\+Solution@{get\+Solution}}
 \index{get\+Solution@{get\+Solution}!Data\+Bus@{Data\+Bus}}
 \subsubsection{\texorpdfstring{get\+Solution()}{getSolution()}}
 {\footnotesize\ttfamily Integer Data\+Bus.\+get\+Solution (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Gets the solution \begin{DoxyReturn}{Returns}
+int\+: solution 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_data_bus_a79d21b045c4657cf561f65c06e13b3e4}\label{class_data_bus_a79d21b045c4657cf561f65c06e13b3e4}} 
 \index{Data\+Bus@{Data\+Bus}!get\+Value@{get\+Value}}
 \index{get\+Value@{get\+Value}!Data\+Bus@{Data\+Bus}}
 \subsubsection{\texorpdfstring{get\+Value()}{getValue()}}
 {\footnotesize\ttfamily int \mbox{[}$\,$\mbox{]} Data\+Bus.\+get\+Value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Gets the value array, A\+KA the register arguments \begin{DoxyReturn}{Returns}
+int\mbox{[}\mbox{]}\+: values 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_data_bus_a6843337471ebfcff30de95ade080073a}\label{class_data_bus_a6843337471ebfcff30de95ade080073a}} 
 \index{Data\+Bus@{Data\+Bus}!set\+Solution@{set\+Solution}}
 \index{set\+Solution@{set\+Solution}!Data\+Bus@{Data\+Bus}}
 \subsubsection{\texorpdfstring{set\+Solution()}{setSolution()}}
 {\footnotesize\ttfamily void Data\+Bus.\+set\+Solution (\begin{DoxyParamCaption}\item[{Integer}]{solution }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Sets the solution to the instruction, A\+KA the output of the A\+LU. 
+\begin{DoxyParams}{Parameters}
+{\em solution} & Integer \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_data_bus_a9c365db4495bd6ea2f6391cd7b1b03d7}\label{class_data_bus_a9c365db4495bd6ea2f6391cd7b1b03d7}} 
 \index{Data\+Bus@{Data\+Bus}!to\+String@{to\+String}}
 \index{to\+String@{to\+String}!Data\+Bus@{Data\+Bus}}

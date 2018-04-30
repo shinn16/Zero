@@ -18,8 +18,6 @@ void \mbox{\hyperlink{class_pipeline_stage_adc91fb5b9c859a597c6a889c822edb18}{se
 \item 
 void \mbox{\hyperlink{class_pipeline_stage_a5bf1a125f39f8fbcce67d892b67c80af}{set\+Instruction}} (String \mbox{\hyperlink{class_pipeline_stage_a489ee0d4b3d0eee31ec60b9cb24a0e36}{instruction}})
 \item 
-boolean \mbox{\hyperlink{class_pipeline_stage_ae04dfe9641854b90cd470b1267425f0c}{is\+In\+Use}} ()
-\item 
 void \mbox{\hyperlink{class_pipeline_stage_a12c4e47d7abbf17c0042d4b41464fae0}{lock}} ()
 \item 
 void \mbox{\hyperlink{class_pipeline_stage_ade83daea8199744f2f6466f5cbd87330}{unlock}} ()
@@ -42,6 +40,17 @@ String \mbox{\hyperlink{class_pipeline_stage_a489ee0d4b3d0eee31ec60b9cb24a0e36}{
 \end{DoxyCompactItemize}
 
 
+\subsection{Detailed Description}
+\mbox{\hyperlink{class_pipeline_stage}{Pipeline\+Stage}}
+
+\begin{DoxyAuthor}{Author}
+Patrick Shinn 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+4/28/18
+\end{DoxyVersion}
+Represents the R\+I\+SC V pipeline stages 
+
 \subsection{Constructor \& Destructor Documentation}
 \mbox{\Hypertarget{class_pipeline_stage_af608b65a2a3bb7d9fcf3d860152104a2}\label{class_pipeline_stage_af608b65a2a3bb7d9fcf3d860152104a2}} 
 \index{Pipeline\+Stage@{Pipeline\+Stage}!Pipeline\+Stage@{Pipeline\+Stage}}
@@ -58,42 +67,57 @@ String \mbox{\hyperlink{class_pipeline_stage_a489ee0d4b3d0eee31ec60b9cb24a0e36}{
 \subsubsection{\texorpdfstring{get\+Data\+Bus()}{getDataBus()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_data_bus}{Data\+Bus}} Pipeline\+Stage.\+get\+Data\+Bus (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Gets the data\+Bus for the pipeline stage. \begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_data_bus}{Data\+Bus}} 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_pipeline_stage_a0716fd5bf42bb11790bf8ab6568dc22d}\label{class_pipeline_stage_a0716fd5bf42bb11790bf8ab6568dc22d}} 
 \index{Pipeline\+Stage@{Pipeline\+Stage}!get\+Instruction@{get\+Instruction}}
 \index{get\+Instruction@{get\+Instruction}!Pipeline\+Stage@{Pipeline\+Stage}}
 \subsubsection{\texorpdfstring{get\+Instruction()}{getInstruction()}}
 {\footnotesize\ttfamily String Pipeline\+Stage.\+get\+Instruction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Gets the instruction held in the pipeline stage.
+
+\begin{DoxyReturn}{Returns}
+String\+: instruction 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_pipeline_stage_a935e03d46a543f261995097c044fd655}\label{class_pipeline_stage_a935e03d46a543f261995097c044fd655}} 
 \index{Pipeline\+Stage@{Pipeline\+Stage}!get\+Stage@{get\+Stage}}
 \index{get\+Stage@{get\+Stage}!Pipeline\+Stage@{Pipeline\+Stage}}
 \subsubsection{\texorpdfstring{get\+Stage()}{getStage()}}
 {\footnotesize\ttfamily String Pipeline\+Stage.\+get\+Stage (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{class_pipeline_stage_ae04dfe9641854b90cd470b1267425f0c}\label{class_pipeline_stage_ae04dfe9641854b90cd470b1267425f0c}} 
-\index{Pipeline\+Stage@{Pipeline\+Stage}!is\+In\+Use@{is\+In\+Use}}
-\index{is\+In\+Use@{is\+In\+Use}!Pipeline\+Stage@{Pipeline\+Stage}}
-\subsubsection{\texorpdfstring{is\+In\+Use()}{isInUse()}}
-{\footnotesize\ttfamily boolean Pipeline\+Stage.\+is\+In\+Use (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
-
+Gets the stage name \begin{DoxyReturn}{Returns}
+String\+: stage name 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_pipeline_stage_a12c4e47d7abbf17c0042d4b41464fae0}\label{class_pipeline_stage_a12c4e47d7abbf17c0042d4b41464fae0}} 
 \index{Pipeline\+Stage@{Pipeline\+Stage}!lock@{lock}}
 \index{lock@{lock}!Pipeline\+Stage@{Pipeline\+Stage}}
 \subsubsection{\texorpdfstring{lock()}{lock()}}
 {\footnotesize\ttfamily void Pipeline\+Stage.\+lock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
-\mbox{\Hypertarget{class_pipeline_stage_adc91fb5b9c859a597c6a889c822edb18}\label{class_pipeline_stage_adc91fb5b9c859a597c6a889c822edb18}} 
+Locks the pipe instruction \mbox{\Hypertarget{class_pipeline_stage_adc91fb5b9c859a597c6a889c822edb18}\label{class_pipeline_stage_adc91fb5b9c859a597c6a889c822edb18}} 
 \index{Pipeline\+Stage@{Pipeline\+Stage}!set\+Data\+Bus@{set\+Data\+Bus}}
 \index{set\+Data\+Bus@{set\+Data\+Bus}!Pipeline\+Stage@{Pipeline\+Stage}}
 \subsubsection{\texorpdfstring{set\+Data\+Bus()}{setDataBus()}}
 {\footnotesize\ttfamily void Pipeline\+Stage.\+set\+Data\+Bus (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_data_bus}{Data\+Bus}}}]{data\+Bus }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Sets the data\+Bus object. 
+\begin{DoxyParams}{Parameters}
+{\em data\+Bus} & \mbox{\hyperlink{class_data_bus}{Data\+Bus}} \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_pipeline_stage_a5bf1a125f39f8fbcce67d892b67c80af}\label{class_pipeline_stage_a5bf1a125f39f8fbcce67d892b67c80af}} 
 \index{Pipeline\+Stage@{Pipeline\+Stage}!set\+Instruction@{set\+Instruction}}
 \index{set\+Instruction@{set\+Instruction}!Pipeline\+Stage@{Pipeline\+Stage}}
 \subsubsection{\texorpdfstring{set\+Instruction()}{setInstruction()}}
 {\footnotesize\ttfamily void Pipeline\+Stage.\+set\+Instruction (\begin{DoxyParamCaption}\item[{String}]{instruction }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
+Sets the instruction in the pipeline. This does not have anything to do with execution, this is purely for logging purposes. 
+\begin{DoxyParams}{Parameters}
+{\em instruction} & String \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_pipeline_stage_afe1a4701506f8257e53caff512af905d}\label{class_pipeline_stage_afe1a4701506f8257e53caff512af905d}} 
 \index{Pipeline\+Stage@{Pipeline\+Stage}!to\+String@{to\+String}}
 \index{to\+String@{to\+String}!Pipeline\+Stage@{Pipeline\+Stage}}
@@ -106,7 +130,7 @@ String \mbox{\hyperlink{class_pipeline_stage_a489ee0d4b3d0eee31ec60b9cb24a0e36}{
 \subsubsection{\texorpdfstring{unlock()}{unlock()}}
 {\footnotesize\ttfamily void Pipeline\+Stage.\+unlock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
-
+Unlocks the pipe for instruction write 
 
 \subsection{Member Data Documentation}
 \mbox{\Hypertarget{class_pipeline_stage_abf7e2ce98acaa474f4be90e14fda0f26}\label{class_pipeline_stage_abf7e2ce98acaa474f4be90e14fda0f26}} 

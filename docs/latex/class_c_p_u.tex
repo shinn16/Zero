@@ -122,12 +122,29 @@ Array\+List$<$\+String\mbox{[}$\,$\mbox{]}$>$\+: log
 \subsubsection{\texorpdfstring{instruction\+\_\+decode()}{instruction\_decode()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_data_bus}{Data\+Bus}} C\+P\+U.\+instruction\+\_\+decode (\begin{DoxyParamCaption}\item[{String \mbox{[}$\,$\mbox{]}}]{instruction\+\_\+register }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
+Instruction decode is responsible for parsing the assembly code, fetching all needed data for code execution, and checking for data hazards that could occur from accessing the data. This method also puts a lock on registers that are being used to return data and will take a branch preemptively. The execute stage will check for correctness and correct the instruction fetch if necessary.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instruction\+\_\+register} & String Array\+: instruction register value \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_data_bus}{Data\+Bus}}\+: data wrapper to make things easier. This could by seen as a bus. 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_c_p_u_a23d225d9e85ee08b1084782d2702f62e}\label{class_c_p_u_a23d225d9e85ee08b1084782d2702f62e}} 
 \index{C\+PU@{C\+PU}!instruction\+\_\+fetch@{instruction\+\_\+fetch}}
 \index{instruction\+\_\+fetch@{instruction\+\_\+fetch}!C\+PU@{C\+PU}}
 \subsubsection{\texorpdfstring{instruction\+\_\+fetch()}{instruction\_fetch()}}
 {\footnotesize\ttfamily void C\+P\+U.\+instruction\+\_\+fetch (\begin{DoxyParamCaption}\item[{String}]{instruction }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
+Instruction fetch gets an instruction string out of the memory, splits it into a string array, then writes it to the instruction register.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instruction} & String\+: instruction to be decoded \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_c_p_u_aef889eba6973e62664310a5ef8f9654d}\label{class_c_p_u_aef889eba6973e62664310a5ef8f9654d}} 
 \index{C\+PU@{C\+PU}!is\+Done@{is\+Done}}
 \index{is\+Done@{is\+Done}!C\+PU@{C\+PU}}
@@ -145,6 +162,13 @@ boolean done
 \subsubsection{\texorpdfstring{memory\+\_\+access()}{memory\_access()}}
 {\footnotesize\ttfamily void C\+P\+U.\+memory\+\_\+access (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_data_bus}{Data\+Bus}}}]{data\+Bus }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
+\mbox{\hyperlink{class_memory}{Memory}} access handles all stores and loads. Once finished, any locked return registers will be unlocked allowing any stalled stages that depend on the register to advance.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Bus} & \mbox{\hyperlink{class_data_bus}{Data\+Bus}}\+: output of execute \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_c_p_u_a9926463b06331bffb789febcf3cd102f}\label{class_c_p_u_a9926463b06331bffb789febcf3cd102f}} 
 \index{C\+PU@{C\+PU}!next\+\_\+pc@{next\+\_\+pc}}
 \index{next\+\_\+pc@{next\+\_\+pc}!C\+PU@{C\+PU}}
@@ -194,7 +218,7 @@ boolean\+: true if locked, false if not
 \subsubsection{\texorpdfstring{run()}{run()}}
 {\footnotesize\ttfamily void C\+P\+U.\+run (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [package]}}
 
-\mbox{\Hypertarget{class_c_p_u_a16848436db7d768084900aaeaa9c0cce}\label{class_c_p_u_a16848436db7d768084900aaeaa9c0cce}} 
+Simulates one clock cycle with the pipeline. \mbox{\Hypertarget{class_c_p_u_a16848436db7d768084900aaeaa9c0cce}\label{class_c_p_u_a16848436db7d768084900aaeaa9c0cce}} 
 \index{C\+PU@{C\+PU}!stall@{stall}}
 \index{stall@{stall}!C\+PU@{C\+PU}}
 \subsubsection{\texorpdfstring{stall()}{stall()}}
@@ -211,6 +235,13 @@ Null
 \subsubsection{\texorpdfstring{write\+\_\+back()}{write\_back()}}
 {\footnotesize\ttfamily void C\+P\+U.\+write\+\_\+back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_data_bus}{Data\+Bus}}}]{data\+Bus }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
+Write back handles all register value updates. This also unlocks the locked return register allowing a dependent stage to advance.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Bus} & \mbox{\hyperlink{class_data_bus}{Data\+Bus}}\+: output of execute. \\
+\hline
+\end{DoxyParams}
 
 
 \subsection{Member Data Documentation}
